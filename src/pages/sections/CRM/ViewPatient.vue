@@ -1,116 +1,120 @@
 <template>
-  <div class="page-wrapper" v-if="patient">
+  <div class="p-8 font-[Inter,sans-serif]" v-if="patient">
     <!-- Header -->
-    <div class="header">
-      <div class="profile">
-        <img :src="patient.avatar" class="avatar" />
-        <div class="info">
-          <div class="info-head">
-            <h2>{{ patient.name }}</h2>
-            <i class="fas fa-pen edit-icon"></i>
+    <div class="mb-8">
+      <div class="flex items-center gap-5">
+        <img :src="patient.avatar" class="w-[70px] h-[70px] rounded-full object-cover" />
+        <div class="flex-1">
+          <div class="flex items-center gap-2">
+            <h2 class="text-xl font-semibold text-gray-900 m-0">{{ patient.name }}</h2>
+            <i class="fas fa-pen text-purple-600 cursor-pointer"></i>
           </div>
-          <p class="email">{{ patient.email }}</p>
-          <p class="phone">{{ patient.phone }}</p>
+          <p class="text-gray-500 text-sm m-0">{{ patient.email }}</p>
+          <p class="text-gray-500 text-sm m-0">{{ patient.phone }}</p>
         </div>
       </div>
     </div>
 
     <!-- Bio Data + Allergies -->
-    <div class="section-row">
-      <div class="section">
-        <div class="section-header">
-          <h3>Bio Data</h3>
-          <i class="fas fa-pen edit-icon"></i>
+    <div class="flex flex-col lg:flex-row justify-between gap-10 mt-8">
+      <div class="flex-1 mt-8">
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="text-base font-semibold text-gray-900 m-0">Bio Data</h3>
+          <i class="fas fa-pen text-purple-600 cursor-pointer"></i>
         </div>
-        <ul class="info-list">
-          <li><strong>Skin Type:</strong> {{ patient.skinType }}</li>
-          <li><strong>Concerns:</strong> {{ patient.concerns }}</li>
-          <li><strong>Date of Birth:</strong> {{ patient.dob }}</li>
-          <li><strong>Address:</strong> {{ patient.address }}</li>
-          <li><strong>Emergency Contact:</strong> {{ patient.emergencyContact }}</li>
+        <ul class="list-none p-0 text-sm text-gray-700">
+          <li class="mb-1.5"><strong>Skin Type:</strong> {{ patient.skinType }}</li>
+          <li class="mb-1.5"><strong>Concerns:</strong> {{ patient.concerns }}</li>
+          <li class="mb-1.5"><strong>Date of Birth:</strong> {{ patient.dob }}</li>
+          <li class="mb-1.5"><strong>Address:</strong> {{ patient.address }}</li>
+          <li class="mb-1.5"><strong>Emergency Contact:</strong> {{ patient.emergencyContact }}</li>
         </ul>
       </div>
-      <div class="section">
-        <div class="section-header">
-          <h3>Allergies</h3>
-          <i class="fas fa-pen edit-icon"></i>
+      <div class="flex-1 mt-8">
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="text-base font-semibold text-gray-900 m-0">Allergies</h3>
+          <i class="fas fa-pen text-purple-600 cursor-pointer"></i>
         </div>
-        <ul class="info-list">
-          <li v-for="(item, index) in patient.allergies" :key="index">{{ item }}</li>
+        <ul class="list-none p-0 text-sm text-gray-700">
+          <li v-for="(item, index) in patient.allergies" :key="index" class="mb-1.5">{{ item }}</li>
         </ul>
       </div>
     </div>
 
     <!-- Medical History -->
-    <div class="section">
-      <div class="section-header">
-        <h3>Medical History</h3>
-        <i class="fas fa-pen edit-icon"></i>
+    <div class="flex-1 mt-8">
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="text-base font-semibold text-gray-900 m-0">Medical History</h3>
+        <i class="fas fa-pen text-purple-600 cursor-pointer"></i>
       </div>
-      <table class="history-table">
-        <thead>
-          <tr>
-            <th>Medication</th>
-            <th>Dosage</th>
-            <th>Frequency</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(med, index) in patient.medications" :key="index">
-            <td>
-              <strong>{{ med.name }}</strong>
-            </td>
-            <td>{{ med.dosage }}</td>
-            <td>{{ med.frequency }}</td>
-            <td>{{ med.startDate }}</td>
-            <td>{{ med.endDate }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <button class="add-btn" @click="openAddModal('medical')">
-        <i class="fas fa-plus"></i> Add Medication
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse mb-2.5">
+          <thead>
+            <tr>
+              <th class="bg-gray-100 text-gray-500 text-left text-xs uppercase p-3">Medication</th>
+              <th class="bg-gray-100 text-gray-500 text-left text-xs uppercase p-3">Dosage</th>
+              <th class="bg-gray-100 text-gray-500 text-left text-xs uppercase p-3">Frequency</th>
+              <th class="bg-gray-100 text-gray-500 text-left text-xs uppercase p-3">Start Date</th>
+              <th class="bg-gray-100 text-gray-500 text-left text-xs uppercase p-3">End Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(med, index) in patient.medications" :key="index">
+              <td class="py-3.5 px-3 border-t border-gray-200 text-sm text-gray-900">
+                <strong>{{ med.name }}</strong>
+              </td>
+              <td class="py-3.5 px-3 border-t border-gray-200 text-sm text-gray-900">{{ med.dosage }}</td>
+              <td class="py-3.5 px-3 border-t border-gray-200 text-sm text-gray-900">{{ med.frequency }}</td>
+              <td class="py-3.5 px-3 border-t border-gray-200 text-sm text-gray-900">{{ med.startDate }}</td>
+              <td class="py-3.5 px-3 border-t border-gray-200 text-sm text-gray-900">{{ med.endDate }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button class="bg-purple-50 text-purple-600 border border-dashed border-purple-300 text-sm py-2 px-3.5 rounded-lg cursor-pointer mt-3 hover:bg-purple-100 transition-colors" @click="openAddModal('medical')">
+        <i class="fas fa-plus mr-1.5"></i> Add Medication
       </button>
     </div>
 
     <!-- Treatment History -->
-    <div class="section">
-      <div class="section-header">
-        <h3>Treatment History</h3>
-        <i class="fas fa-pen edit-icon"></i>
+    <div class="flex-1 mt-8">
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="text-base font-semibold text-gray-900 m-0">Treatment History</h3>
+        <i class="fas fa-pen text-purple-600 cursor-pointer"></i>
       </div>
-      <table class="history-table">
-        <thead>
-          <tr>
-            <th>Treatment</th>
-            <th>Date</th>
-            <th>Provider</th>
-            <th>Notes</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(treat, index) in patient.treatments" :key="index">
-            <td>{{ treat.name }}</td>
-            <td>{{ treat.date }}</td>
-            <td>{{ treat.provider }}</td>
-            <td>{{ treat.notes }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <button class="add-btn" @click="openAddModal('treatment')">
-        <i class="fas fa-plus"></i> Add Treatment
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse mb-2.5">
+          <thead>
+            <tr>
+              <th class="bg-gray-100 text-gray-500 text-left text-xs uppercase p-3">Treatment</th>
+              <th class="bg-gray-100 text-gray-500 text-left text-xs uppercase p-3">Date</th>
+              <th class="bg-gray-100 text-gray-500 text-left text-xs uppercase p-3">Provider</th>
+              <th class="bg-gray-100 text-gray-500 text-left text-xs uppercase p-3">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(treat, index) in patient.treatments" :key="index">
+              <td class="py-3.5 px-3 border-t border-gray-200 text-sm text-gray-900">{{ treat.name }}</td>
+              <td class="py-3.5 px-3 border-t border-gray-200 text-sm text-gray-900">{{ treat.date }}</td>
+              <td class="py-3.5 px-3 border-t border-gray-200 text-sm text-gray-900">{{ treat.provider }}</td>
+              <td class="py-3.5 px-3 border-t border-gray-200 text-sm text-gray-900">{{ treat.notes }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button class="bg-purple-50 text-purple-600 border border-dashed border-purple-300 text-sm py-2 px-3.5 rounded-lg cursor-pointer mt-3 hover:bg-purple-100 transition-colors" @click="openAddModal('treatment')">
+        <i class="fas fa-plus mr-1.5"></i> Add Treatment
       </button>
     </div>
 
     <!-- Modal -->
-    <div class="submodal-overlay" v-if="addModalType">
-      <div class="submodal">
-        <h3>Add {{ addModalType === "medical" ? "Medication" : "Treatment" }}</h3>
-        <p class="placeholder">Form fields go here...</p>
-        <div class="actions">
-          <button @click="addModalType = ''">Cancel</button>
-          <button class="save">Save</button>
+    <div v-if="addModalType" class="fixed inset-0 bg-black/50 flex justify-center items-center z-[1100]">
+      <div class="bg-white p-6 rounded-xl w-[400px] max-w-[90%] shadow-xl">
+        <h3 class="mb-4 text-lg font-semibold">Add {{ addModalType === "medical" ? "Medication" : "Treatment" }}</h3>
+        <p class="text-sm text-gray-500 mb-5">Form fields go here...</p>
+        <div class="flex justify-end gap-3">
+          <button @click="addModalType = ''" class="bg-gray-200 border-none py-2 px-3.5 rounded-md cursor-pointer hover:bg-gray-300 transition-colors">Cancel</button>
+          <button class="bg-purple-600 text-white border-none py-2 px-3.5 rounded-md cursor-pointer hover:bg-purple-700 transition-colors">Save</button>
         </div>
       </div>
     </div>
@@ -253,146 +257,3 @@ onMounted(() => {
   }
 });
 </script>
-
-<style scoped>
-.page-wrapper {
-  padding: 32px;
-  font-family: "Inter", sans-serif;
-}
-.header .profile {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-.avatar {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-}
-.info {
-  flex: 1;
-}
-.info-head {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.info h2 {
-  font-size: 20px;
-  font-weight: 600;
-  color: #111827;
-}
-.email,
-.phone {
-  color: #6b7280;
-  font-size: 14px;
-}
-.section-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 40px;
-  margin-top: 30px;
-}
-.section {
-  flex: 1;
-  margin-top: 32px;
-}
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-.section-header h3 {
-  font-size: 16px;
-  font-weight: 600;
-  color: #111827;
-}
-.edit-icon {
-  color: #7c3aed;
-  cursor: pointer;
-}
-.info-list {
-  list-style: none;
-  padding-left: 0;
-  font-size: 14px;
-  color: #374151;
-}
-.info-list li {
-  margin-bottom: 6px;
-}
-.history-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 10px;
-}
-.history-table th {
-  background-color: #f3f4f6;
-  color: #6b7280;
-  text-align: left;
-  font-size: 13px;
-  text-transform: uppercase;
-  padding: 12px;
-}
-.history-table td {
-  padding: 14px 12px;
-  border-top: 1px solid #e5e7eb;
-  font-size: 14px;
-  color: #111827;
-}
-.add-btn {
-  background-color: #f9f5ff;
-  color: #7c3aed;
-  border: 1px dashed #c4b5fd;
-  font-size: 14px;
-  padding: 8px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-top: 12px;
-}
-.add-btn i {
-  margin-right: 6px;
-}
-.submodal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1100;
-}
-.submodal {
-  background: #fff;
-  padding: 24px;
-  border-radius: 12px;
-  width: 400px;
-  max-width: 90%;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-}
-.submodal h3 {
-  margin-bottom: 16px;
-  font-size: 18px;
-}
-.placeholder {
-  font-size: 14px;
-  color: #6b7280;
-  margin-bottom: 20px;
-}
-.actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-}
-.actions button {
-  background: #e5e7eb;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-.actions .save {
-  background: #7c3aed;
-  color: white;
-}
-</style>

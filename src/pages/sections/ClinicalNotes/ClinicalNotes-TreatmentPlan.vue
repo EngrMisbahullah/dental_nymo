@@ -1,132 +1,162 @@
 <template>
-  <div class="main-container">
-    <header class="header">
-      <h1 class="header__title">John Doe</h1>
-      <span class="header__patient-id">Patient ID: 12345</span>
-      <div class="header__actions">
-        <button class="header__button">
-          <i class="fas fa-history"></i> Review History
+  <div class="flex flex-col min-h-screen w-full p-4 md:p-6 bg-gray-100 font-[Poppins]">
+    <!-- Header -->
+    <header class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-0 p-4 md:px-10 md:py-5 border-b border-gray-300 bg-white rounded-t-lg">
+      <h1 class="text-xl md:text-2xl font-bold text-gray-800 m-0">John Doe</h1>
+      <span class="sm:ml-4 text-gray-500 text-sm">Patient ID: 12345</span>
+      <div class="sm:ml-auto flex flex-wrap gap-2 mt-3 sm:mt-0">
+        <button class="flex items-center gap-2 px-3 md:px-4 py-2 text-sm font-medium border border-gray-300 bg-white rounded-md cursor-pointer transition-colors hover:bg-gray-100">
+          <i class="fas fa-history"></i> 
+          <span class="hidden sm:inline">Review History</span>
+          <span class="sm:hidden">History</span>
         </button>
-        <button class="header__button header__button--primary">
-          <i class="fas fa-plus"></i> New Entry
+        <button class="flex items-center gap-2 px-3 md:px-4 py-2 text-sm font-medium bg-indigo-600 text-white border border-indigo-600 rounded-md cursor-pointer transition-colors hover:bg-indigo-700">
+          <i class="fas fa-plus"></i> 
+          <span class="hidden sm:inline">New Entry</span>
+          <span class="sm:hidden">New</span>
         </button>
       </div>
     </header>
 
-    <div class="tabs">
+    <!-- Tabs -->
+    <div class="flex bg-gray-200 border-b border-gray-300 px-4 md:px-10 overflow-x-auto">
       <div
-        class="tab"
-        :class="{ 'tab--active': activeTab === 'soap' }"
+        :class="[
+          'px-4 md:px-5 py-3 cursor-pointer font-medium border-b-[3px] transition-colors whitespace-nowrap text-sm md:text-base',
+          activeTab === 'soap' 
+            ? 'border-gray-900 text-gray-900' 
+            : 'border-transparent text-gray-500 hover:text-gray-800'
+        ]"
         @click="activeTab = 'soap'"
       >
         SOAP Notes
       </div>
       <div
-        class="tab"
-        :class="{ 'tab--active': activeTab === 'treatment' }"
+        :class="[
+          'px-4 md:px-5 py-3 cursor-pointer font-medium border-b-[3px] transition-colors whitespace-nowrap text-sm md:text-base',
+          activeTab === 'treatment' 
+            ? 'border-gray-900 text-gray-900' 
+            : 'border-transparent text-gray-500 hover:text-gray-800'
+        ]"
         @click="activeTab = 'treatment'"
       >
         Treatment Plans
       </div>
     </div>
 
-    <div class="content-container">
-      <div class="left-panel" v-show="activeTab === 'soap'">
-        <div class="card">
-          <div class="card__header">
-            <h2 class="card__title">New SOAP Note</h2>
-            <div class="card__header-right">
-              <label for="template-select">Template:</label>
-              <select id="template-select" class="template-select">
+    <!-- Content Container -->
+    <div class="flex flex-col lg:flex-row p-4 md:px-10 md:py-5 gap-5">
+      <!-- Left Panel - SOAP Form -->
+      <div class="flex-1" v-show="activeTab === 'soap'">
+        <div class="border border-gray-200 rounded-lg bg-white overflow-hidden shadow-md">
+          <!-- Card Header -->
+          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-4 md:px-5 md:py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold m-0 text-gray-800">New SOAP Note</h2>
+            <div class="sm:ml-auto flex items-center gap-2">
+              <label for="template-select" class="text-sm text-gray-600">Template:</label>
+              <select id="template-select" class="px-2.5 py-1.5 rounded border border-gray-300 text-sm text-gray-700">
                 <option>General Checkup</option>
               </select>
             </div>
           </div>
-          <div class="card__body">
-            <div class="form-group">
-              <label for="subjective">Subjective</label>
+          
+          <!-- Card Body -->
+          <div class="p-4 md:p-5">
+            <div class="mb-5">
+              <label for="subjective" class="block font-medium mb-1.5 text-gray-700">Subjective</label>
               <textarea
                 id="subjective"
-                class="form-control"
+                class="w-full p-2.5 border border-gray-300 rounded resize-y min-h-[80px] text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 placeholder="Patient's chief complaint, history..."
               ></textarea>
             </div>
-            <div class="form-group">
-              <label for="objective">Objective</label>
+            <div class="mb-5">
+              <label for="objective" class="block font-medium mb-1.5 text-gray-700">Objective</label>
               <textarea
                 id="objective"
-                class="form-control"
+                class="w-full p-2.5 border border-gray-300 rounded resize-y min-h-[80px] text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 placeholder="Clinical findings from examination..."
               ></textarea>
             </div>
-            <div class="form-group">
-              <label for="assessment">Assessment</label>
+            <div class="mb-5">
+              <label for="assessment" class="block font-medium mb-1.5 text-gray-700">Assessment</label>
               <textarea
                 id="assessment"
-                class="form-control"
+                class="w-full p-2.5 border border-gray-300 rounded resize-y min-h-[80px] text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 placeholder="Diagnosis or differential diagnosis..."
               ></textarea>
             </div>
-            <div class="form-group">
-              <label for="plan">Plan</label>
+            <div class="mb-5">
+              <label for="plan" class="block font-medium mb-1.5 text-gray-700">Plan</label>
               <textarea
                 id="plan"
-                class="form-control"
+                class="w-full p-2.5 border border-gray-300 rounded resize-y min-h-[80px] text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 placeholder="Treatment plan, medications, procedures..."
               ></textarea>
             </div>
-            <div class="card__footer">
-              <button class="button">Save Draft</button>
-              <button class="button button--primary">Submit</button>
+            
+            <!-- Footer Buttons -->
+            <div class="flex justify-end gap-2.5 pt-2.5">
+              <button class="px-4 py-2 text-sm rounded-md cursor-pointer transition-colors bg-gray-50 text-gray-700 border border-gray-300 hover:bg-gray-200">
+                Save Draft
+              </button>
+              <button class="px-4 py-2 text-sm rounded-md cursor-pointer transition-colors bg-indigo-600 text-white border border-indigo-600 hover:bg-indigo-700">
+                Submit
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="right-panel">
-        <div class="card" v-if="activeTab === 'soap'">
-          <div class="card__header">
-            <h2 class="card__title">Sample SOAP Notes</h2>
+      <!-- Right Panel -->
+      <div class="flex-1">
+        <!-- SOAP Notes History -->
+        <div class="border border-gray-200 rounded-lg bg-white overflow-hidden shadow-md" v-if="activeTab === 'soap'">
+          <div class="flex items-center p-4 md:px-5 md:py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold m-0 text-gray-800">Sample SOAP Notes</h2>
           </div>
-          <div class="card__body">
-            <div class="note-entry">
-              <div class="note-header">
-                <span class="note-date">2024-05-15</span>
-                <span class="note-type">General Checkup</span>
+          <div class="p-4 md:p-5">
+            <!-- Note Entry 1 -->
+            <div class="p-4 border-b border-gray-200">
+              <div class="flex justify-between mb-2.5 font-bold text-sm">
+                <span class="text-gray-500">2024-05-15</span>
+                <span class="text-indigo-600">General Checkup</span>
               </div>
-              <p>
-                <strong>S:</strong> Patient reports sensitivity in the upper right
+              <p class="my-1.5 text-sm leading-relaxed text-gray-600">
+                <strong class="text-gray-800">S:</strong> Patient reports sensitivity in the upper right
                 quadrant, especially to cold beverages. No pain upon biting. Has not seen
                 a dentist in two years.
               </p>
-              <p>
-                <strong>O:</strong> Clinical examination reveals an old amalgam filling on
+              <p class="my-1.5 text-sm leading-relaxed text-gray-600">
+                <strong class="text-gray-800">O:</strong> Clinical examination reveals an old amalgam filling on
                 tooth #3. Small recurrent decay is visible on the distal margin. No
                 mobility or signs of infection.
               </p>
-              <p><strong>A:</strong> Recurrent decay, tooth #3.</p>
-              <p>
-                <strong>P:</strong> Discussed treatment options, including a new composite
+              <p class="my-1.5 text-sm leading-relaxed text-gray-600"><strong class="text-gray-800">A:</strong> Recurrent decay, tooth #3.</p>
+              <p class="my-1.5 text-sm leading-relaxed text-gray-600">
+                <strong class="text-gray-800">P:</strong> Discussed treatment options, including a new composite
                 filling. Patient consented. Scheduled for next week.
               </p>
             </div>
-            <div class="note-entry">
-              <div class="note-header">
-                <span class="note-date">2024-03-20</span>
-                <span class="note-type">Emergency Visit</span>
+            
+            <!-- Note Entry 2 -->
+            <div class="p-4">
+              <div class="flex justify-between mb-2.5 font-bold text-sm">
+                <span class="text-gray-500">2024-03-20</span>
+                <span class="text-indigo-600">Emergency Visit</span>
               </div>
-              <p>
-                <strong>S:</strong> Patient presented with severe pain on the lower left
+              <p class="my-1.5 text-sm leading-relaxed text-gray-600">
+                <strong class="text-gray-800">S:</strong> Patient presented with severe pain on the lower left
                 side. The pain is sharp and constant.
               </p>
-              <p>
-                <strong>O:</strong> Examination shows a large carious lesion on tooth #19.
+              <p class="my-1.5 text-sm leading-relaxed text-gray-600">
+                <strong class="text-gray-800">O:</strong> Examination shows a large carious lesion on tooth #19.
                 Percussion and palpation tests were positive. X-ray confirms extensive
                 decay into the pulp.
               </p>
-              <p><strong>A:</strong> Irreversible pulpitis, tooth #19.</p>
-              <p>
-                <strong>P:</strong> Performed an emergency pulpectomy to alleviate pain.
+              <p class="my-1.5 text-sm leading-relaxed text-gray-600"><strong class="text-gray-800">A:</strong> Irreversible pulpitis, tooth #19.</p>
+              <p class="my-1.5 text-sm leading-relaxed text-gray-600">
+                <strong class="text-gray-800">P:</strong> Performed an emergency pulpectomy to alleviate pain.
                 Prescribed antibiotics and anti-inflammatory medication. Recommended a
                 root canal procedure with a crown.
               </p>
@@ -134,68 +164,78 @@
           </div>
         </div>
 
-        <div class="card" v-if="activeTab === 'treatment'">
-          <div class="card__header">
-            <h2 class="card__title">Current Treatment Plan</h2>
-            <button class="button button--secondary">Edit Plan</button>
+        <!-- Treatment Plan -->
+        <div class="border border-gray-200 rounded-lg bg-white overflow-hidden shadow-md" v-if="activeTab === 'treatment'">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-4 md:px-5 md:py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold m-0 text-gray-800">Current Treatment Plan</h2>
+            <button class="sm:ml-auto px-4 py-2 text-sm rounded-md cursor-pointer transition-colors bg-gray-50 text-gray-700 border border-gray-300 hover:bg-gray-200">
+              Edit Plan
+            </button>
           </div>
-          <div class="card__body">
-            <table class="treatment-table">
-              <thead>
-                <tr>
-                  <th>PROCEDURE</th>
-                  <th>TOOTH</th>
-                  <th>COST</th>
-                  <th>STATUS</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Examination</td>
-                  <td>All</td>
-                  <td>$50</td>
-                  <td>
-                    <span class="status-badge status-badge--completed">Completed</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Filling</td>
-                  <td>18</td>
-                  <td>$120</td>
-                  <td>
-                    <span class="status-badge status-badge--scheduled">Scheduled</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Extraction</td>
-                  <td>21</td>
-                  <td>$200</td>
-                  <td>
-                    <span class="status-badge status-badge--pending">Pending</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Crown</td>
-                  <td>12</td>
-                  <td>$800</td>
-                  <td>
-                    <span class="status-badge status-badge--proposed">Proposed</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="additional-notes">
-              <h3 class="notes-title">Additional Notes</h3>
-              <p class="notes-text">
+          <div class="p-4 md:p-5">
+            <!-- Treatment Table -->
+            <div class="overflow-x-auto -mx-4 md:mx-0">
+              <table class="w-full border-collapse mb-5 min-w-[500px]">
+                <thead>
+                  <tr>
+                    <th class="p-3 text-left border-b border-gray-200 bg-gray-200 font-medium text-gray-500 uppercase text-xs">Procedure</th>
+                    <th class="p-3 text-left border-b border-gray-200 bg-gray-200 font-medium text-gray-500 uppercase text-xs">Tooth</th>
+                    <th class="p-3 text-left border-b border-gray-200 bg-gray-200 font-medium text-gray-500 uppercase text-xs">Cost</th>
+                    <th class="p-3 text-left border-b border-gray-200 bg-gray-200 font-medium text-gray-500 uppercase text-xs">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="p-3 text-left border-b border-gray-200 text-sm">Examination</td>
+                    <td class="p-3 text-left border-b border-gray-200 text-sm">All</td>
+                    <td class="p-3 text-left border-b border-gray-200 text-sm">$50</td>
+                    <td class="p-3 text-left border-b border-gray-200 text-sm">
+                      <span class="inline-block px-2 py-1 rounded-xl text-xs font-medium bg-green-100 text-green-800">Completed</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 text-left border-b border-gray-200 text-sm">Filling</td>
+                    <td class="p-3 text-left border-b border-gray-200 text-sm">18</td>
+                    <td class="p-3 text-left border-b border-gray-200 text-sm">$120</td>
+                    <td class="p-3 text-left border-b border-gray-200 text-sm">
+                      <span class="inline-block px-2 py-1 rounded-xl text-xs font-medium bg-yellow-100 text-yellow-800">Scheduled</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 text-left border-b border-gray-200 text-sm">Extraction</td>
+                    <td class="p-3 text-left border-b border-gray-200 text-sm">21</td>
+                    <td class="p-3 text-left border-b border-gray-200 text-sm">$200</td>
+                    <td class="p-3 text-left border-b border-gray-200 text-sm">
+                      <span class="inline-block px-2 py-1 rounded-xl text-xs font-medium bg-red-100 text-red-800">Pending</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 text-left border-b border-gray-200 text-sm">Crown</td>
+                    <td class="p-3 text-left border-b border-gray-200 text-sm">12</td>
+                    <td class="p-3 text-left border-b border-gray-200 text-sm">$800</td>
+                    <td class="p-3 text-left border-b border-gray-200 text-sm">
+                      <span class="inline-block px-2 py-1 rounded-xl text-xs font-medium bg-blue-100 text-blue-800">Proposed</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <!-- Additional Notes -->
+            <div class="mt-5 border-t border-gray-200 pt-5">
+              <h3 class="text-base font-semibold mb-2.5 text-gray-800">Additional Notes</h3>
+              <p class="text-sm text-gray-600 leading-relaxed">
                 Patient has expressed some anxiety about the upcoming extraction. Consider
                 offering sedation options.
               </p>
             </div>
-            <div class="digital-signature">
-              <h3 class="signature-title">Digital Signature</h3>
-              <div class="signature-box">
-                <span class="signature-text">Patient Signature Required</span>
-                <button class="button button--primary signature-button">
+            
+            <!-- Digital Signature -->
+            <div class="mt-5">
+              <h3 class="text-base font-semibold mb-2.5 text-gray-800">Digital Signature</h3>
+              <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border border-gray-200 rounded p-4 bg-gray-50">
+                <span class="italic text-gray-500 text-sm">Patient Signature Required</span>
+                <button class="flex items-center gap-2 px-4 py-2 text-sm rounded-md cursor-pointer transition-colors bg-indigo-600 text-white border border-indigo-600 hover:bg-indigo-700">
                   <i class="fas fa-signature"></i> Capture Signature
                 </button>
               </div>
@@ -217,344 +257,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css");
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
-
-body {
-  font-family: "Poppins", sans-serif; /* Updated font family */
-  background-color: #f3f4f6; /* Updated background color */
-  margin: 0;
-  padding: 0;
-  color: #374151; /* Updated primary font color */
-}
-
-/* Consistent heading color */
-.header__title,
-.card__title,
-.notes-title,
-.signature-title {
-  color: #333;
-}
-
-.main-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  width: 100%;
-  padding: 24px;
-  background-color: #f3f4f6; /* Consistent background color*/
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  padding: 20px 40px;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.header__title {
-  font-size: 24px; /* Matches the larger patient name font size*/
-  font-weight: 700; /* Uses a bold font weight*/
-  color: #1f2937; /* Darker font color for emphasis*/
-  margin: 0; /* Remove default margin */
-}
-
-.header__patient-id {
-  margin-left: 15px;
-  color: #6b7280; /* Matches the gray color of patient details*/
-  font-size: 14px; /* Matches the font size of patient details*/
-}
-.header__actions {
-  margin-left: auto;
-  display: flex;
-  gap: 10px;
-}
-
-.header__button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: 500;
-  border: 1px solid #d1d5db; /* Adjusted for consistency */
-  background-color: #fff;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
-}
-
-.header__button:hover {
-  background-color: #f0f0f0;
-}
-
-.header__button--primary {
-  background-color: #4f46e5;
-  color: #fff;
-  border-color: #4f46e5;
-}
-
-.header__button--primary:hover {
-  background-color: #4338ca;
-  border-color: #4338ca;
-}
-
-.tabs {
-  display: flex;
-  background-color: #e5e7eb; /* Adjusted for consistency */
-  border-bottom: 1px solid #d1d5db;
-  padding: 0 40px;
-}
-
-.tab {
-  padding: 12px 20px;
-  cursor: pointer;
-  font-weight: 500;
-  color: #6b7280; /* Adjusted for consistency */
-  border-bottom: 3px solid transparent;
-  transition: border-bottom-color 0.2s, color 0.2s;
-}
-
-.tab:hover {
-  color: #1f2937; /* Adjusted for consistency */
-}
-
-.tab--active {
-  border-bottom-color: #111418;
-  color: #111418;
-}
-
-.content-container {
-  display: flex;
-  padding: 20px 40px;
-  gap: 20px;
-}
-
-.left-panel,
-.right-panel {
-  flex: 1;
-}
-
-.card {
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  background: #fff;
-  overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-}
-
-.card__header {
-  display: flex;
-  align-items: center;
-  padding: 15px 20px;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.card__title {
-  font-size: 18px;
-  font-weight: 600;
-  margin: 0;
-}
-
-.card__header-right {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.template-select {
-  padding: 6px 10px;
-  border-radius: 4px;
-  border: 1px solid #d1d5db;
-  font-size: 14px;
-  color: #374151;
-}
-
-.card__body {
-  padding: 20px;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  font-weight: 500;
-  margin-bottom: 5px;
-}
-
-.form-control {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  resize: vertical;
-  min-height: 80px;
-  font-size: 14px;
-}
-
-.card__footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  padding-top: 10px;
-}
-
-.button {
-  padding: 8px 16px;
-  font-size: 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
-}
-
-.button--primary {
-  background-color: #4f46e5;
-  color: #fff;
-  border: 1px solid #4f46e5;
-}
-
-.button--primary:hover {
-  background-color: #4338ca;
-}
-
-.button--secondary {
-  background-color: #f9fafb;
-  color: #374151;
-  border: 1px solid #d1d5db;
-}
-
-.button--secondary:hover {
-  background-color: #e5e7eb;
-}
-
-.treatment-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-}
-
-.treatment-table th,
-.treatment-table td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.treatment-table th {
-  background-color: #e5e7eb;
-  font-weight: 500;
-  color: #6b7280;
-  text-transform: uppercase;
-  font-size: 12px;
-}
-
-.status-badge {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 500;
-  text-align: center;
-}
-
-.status-badge--completed {
-  background-color: #d4edda;
-  color: #155724;
-}
-
-.status-badge--scheduled {
-  background-color: #fff3cd;
-  color: #856404;
-}
-
-.status-badge--pending {
-  background-color: #f8d7da;
-  color: #721c24;
-}
-
-.status-badge--proposed {
-  background-color: #cce5ff;
-  color: #004085;
-}
-
-.additional-notes {
-  margin-top: 20px;
-  border-top: 1px solid #e5e7eb;
-  padding-top: 20px;
-}
-
-.notes-title,
-.signature-title {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-
-.notes-text {
-  font-size: 14px;
-  color: #4b5563; /* Adjusted for consistency */
-  line-height: 1.5;
-}
-
-.digital-signature {
-  margin-top: 20px;
-}
-
-.signature-box {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid #e5e7eb;
-  border-radius: 4px;
-  padding: 15px;
-  background-color: #f9fafb;
-}
-
-.signature-text {
-  font-style: italic;
-  color: #6b7280;
-}
-
-.signature-button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* Styles for the new notes section */
-.note-entry {
-  padding: 15px;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.note-entry:last-child {
-  border-bottom: none;
-}
-
-.note-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  font-weight: bold;
-}
-
-.note-date {
-  color: #6b7280;
-}
-
-.note-type {
-  color: #4f46e5;
-}
-
-.note-entry p {
-  margin: 5px 0;
-  font-size: 14px;
-  line-height: 1.4;
-  color: #4b5563;
-}
-</style>

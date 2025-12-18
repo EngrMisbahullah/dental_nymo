@@ -1,50 +1,50 @@
 <template>
-  <div class="container">
+  <div class="bg-gray-50 min-h-screen p-8">
     <!-- Top Bar -->
-    <div class="top-bar">
-      <h1 class="page-title">Patients</h1>
-      <div class="top-controls">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+      <h1 class="text-[28px] font-bold text-gray-900 m-0">Patients</h1>
+      <div class="flex items-center gap-3">
         <input
           v-model="searchQuery"
           type="text"
-          class="search-input"
+          class="py-2.5 px-3.5 border border-gray-300 rounded-lg text-sm min-w-[220px] bg-white text-gray-900 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20"
           placeholder="Search patients..."
         />
-        <!-- <button class="add-btn" @click="showModal = true">+ Add Patient</button> -->
-        <router-link to="/dashboard/crm/add-patient" class="add-btn"
-          >+ Add Patient</router-link
-        >
+        <router-link to="/dashboard/crm/add-patient" class="bg-indigo-600 text-white py-2.5 px-4 border-none rounded-lg text-sm font-medium shadow-md hover:bg-indigo-700 transition-colors no-underline">
+          + Add Patient
+        </router-link>
       </div>
     </div>
 
     <!-- Patient Table -->
-    <div class="table-wrapper">
-      <table class="patient-table">
+    <div class="bg-white rounded-xl shadow-sm overflow-x-auto">
+      <table class="w-full border-collapse rounded-lg overflow-hidden">
         <thead>
           <tr>
-            <th>Patient Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Skin Type</th>
-            <th>Concerns</th>
-            <th>Actions</th>
+            <th class="bg-gray-100 text-gray-500 text-xs text-left uppercase p-4">Patient Name</th>
+            <th class="bg-gray-100 text-gray-500 text-xs text-left uppercase p-4">Email</th>
+            <th class="bg-gray-100 text-gray-500 text-xs text-left uppercase p-4">Phone</th>
+            <th class="bg-gray-100 text-gray-500 text-xs text-left uppercase p-4">Skin Type</th>
+            <th class="bg-gray-100 text-gray-500 text-xs text-left uppercase p-4">Concerns</th>
+            <th class="bg-gray-100 text-gray-500 text-xs text-left uppercase p-4">Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(patient, index) in filteredPatients" :key="index">
-            <td class="patient-info">
-              <!-- <img :src="patient.avatar" /> -->
-              <span>{{ patient.name }}</span>
+          <tr v-for="(patient, index) in filteredPatients" :key="index" class="hover:bg-gray-50">
+            <td class="p-4 text-sm text-gray-900 border-t border-gray-200 align-middle">
+              <div class="flex items-center gap-3">
+                <span>{{ patient.name }}</span>
+              </div>
             </td>
-            <td>{{ patient.email }}</td>
-            <td>{{ patient.phone }}</td>
-            <td>{{ patient.skinType }}</td>
-            <td>{{ patient.concerns }}</td>
-            <td class="actions">
-              <!-- <i class="fas fa-eye" @click="openViewModal(patient)"></i> -->
-              <i class="fas fa-eye" @click="goToViewPatient(patient.id)"></i>
-
-              <i class="fas fa-pen"></i>
+            <td class="p-4 text-sm text-gray-900 border-t border-gray-200 align-middle">{{ patient.email }}</td>
+            <td class="p-4 text-sm text-gray-900 border-t border-gray-200 align-middle">{{ patient.phone }}</td>
+            <td class="p-4 text-sm text-gray-900 border-t border-gray-200 align-middle">{{ patient.skinType }}</td>
+            <td class="p-4 text-sm text-gray-900 border-t border-gray-200 align-middle">{{ patient.concerns }}</td>
+            <td class="p-4 text-sm text-gray-900 border-t border-gray-200 align-middle">
+              <div class="flex gap-3">
+                <i class="fas fa-eye text-indigo-600 text-base cursor-pointer hover:text-indigo-700" @click="goToViewPatient(patient.id)"></i>
+                <i class="fas fa-pen text-indigo-600 text-base cursor-pointer hover:text-indigo-700"></i>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -52,13 +52,7 @@
     </div>
 
     <!-- Modals -->
-    <!-- <AddPatient v-if="showModal" @close="showModal = false" @add-patient="addPatient" /> -->
     <router-view />
-    <!-- <ViewPatient
-      v-if="showViewModal"
-      :patient="selectedPatient"
-      @close="showViewModal = false"
-    /> -->
   </div>
 </template>
 
@@ -219,114 +213,3 @@ const addPatient = (newPatient) => {
   patients.value.push(newPatient);
 };
 </script>
-
-<style scoped>
-.container {
-  background-color: #f9fafb;
-  min-height: 100vh;
-  padding: 32px;
-}
-
-.top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.page-title {
-  font-size: 28px;
-  font-weight: 700;
-  color: #111827;
-  margin: 0;
-}
-
-.add-btn {
-  background-color: #4f46e5;
-  color: white;
-  padding: 10px 18px;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3);
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.add-btn:hover {
-  background-color: #4338ca;
-}
-
-.table-wrapper {
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.05);
-  overflow-x: auto;
-}
-
-.patient-table {
-  width: 100%;
-  border-collapse: collapse;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.patient-table th {
-  background-color: #f3f4f6;
-  color: #6b7280;
-  font-size: 13px;
-  text-align: left;
-  text-transform: uppercase;
-  padding: 16px;
-}
-
-.patient-table td {
-  padding: 16px;
-  font-size: 14px;
-  color: #111827;
-  border-top: 1px solid #e5e7eb;
-  vertical-align: middle;
-}
-
-.patient-info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.patient-info img {
-  width: 40px;
-  height: 40px;
-  border-radius: 9999px;
-}
-
-.actions i {
-  color: #4f46e5;
-  font-size: 15px;
-  margin-right: 12px;
-  cursor: pointer;
-}
-
-.top-controls {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.search-input {
-  padding: 9px 14px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 14px;
-  min-width: 220px;
-  background-color: white;
-  color: #111827;
-}
-
-.search-input:focus {
-  outline: none;
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
-}
-</style>

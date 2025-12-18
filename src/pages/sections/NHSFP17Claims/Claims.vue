@@ -1,39 +1,39 @@
 <template>
   <!-- Main container with light gray background -->
-  <div class="main-container">
+  <div class="font-[Public_Sans,Noto_Sans,sans-serif] bg-gray-100 min-h-screen flex justify-center p-6">
     <!-- Card-like content container -->
-    <div class="content-container">
+    <div class="w-full max-w-[1400px] flex flex-col bg-white rounded-xl shadow-md gap-5 p-8">
       <!-- Combined buttons and tab navigation section -->
-      <div class="header-section">
+      <div class="flex flex-wrap justify-between items-end gap-6 px-4 pb-0 border-b border-gray-200">
         <div class="flex-grow">
-          <div class="tab-nav">
+          <div class="flex gap-8">
             <a
               v-for="tab in tabs"
               :key="tab.id"
-              :class="['tab-item', { active: activeTab === tab.id }]"
+              :class="['no-underline text-gray-500 py-4 pb-3 border-b-[3px] border-transparent cursor-pointer transition-all duration-300 hover:text-gray-900', { 'text-gray-900 !border-gray-900': activeTab === tab.id }]"
               @click="selectTab(tab.id)"
             >
-              <p>{{ tab.name }}</p>
+              <p class="text-sm font-bold m-0">{{ tab.name }}</p>
             </a>
           </div>
         </div>
         <div class="flex-shrink-0 flex gap-4 mt-4 md:mt-0">
-          <button class="action-btn new-claim-btn" @click="openModal('New Claim')">
+          <button class="h-10 px-5 bg-gray-100 text-gray-900 border-none rounded-lg text-sm font-bold cursor-pointer transition-all duration-200 shadow-sm hover:bg-gray-200 hover:-translate-y-0.5" @click="openModal('New Claim')">
             <span class="truncate">➕ New Claim</span>
           </button>
-          <button class="action-btn submit-batch-btn" @click="openModal('Submit Batch')">
+          <button class="h-10 px-5 bg-blue-500 text-white border-none rounded-lg text-sm font-bold cursor-pointer transition-all duration-200 shadow-sm hover:bg-blue-600 hover:-translate-y-0.5" @click="openModal('Submit Batch')">
             <span class="truncate">📤 Submit Batch</span>
           </button>
-          <button class="action-btn reports-btn" @click="downloadCSV('all')">
+          <button class="h-10 px-5 bg-gray-100 text-gray-900 border-none rounded-lg text-sm font-bold cursor-pointer transition-all duration-200 shadow-sm hover:bg-gray-200 hover:-translate-y-0.5" @click="downloadCSV('all')">
             <span class="truncate">📄 Reports</span>
           </button>
         </div>
       </div>
 
       <!-- Search Bar -->
-      <div class="search-bar">
-        <label class="search-input-wrapper">
-          <div class="search-icon">
+      <div class="py-3 px-4">
+        <label class="flex items-center h-12 w-full bg-gray-100 rounded-lg overflow-hidden shadow-inner">
+          <div class="flex items-center justify-center pl-4 text-gray-500">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24px"
@@ -48,72 +48,74 @@
           </div>
           <input
             placeholder="Search by patient name, performer, claim ID, or band"
-            class="search-input"
+            class="flex-1 bg-transparent border-none h-full py-0 px-4 pl-2 text-base text-gray-900 outline-none placeholder-gray-500"
           />
         </label>
       </div>
 
       <!-- Claims Table -->
-      <div class="table-container">
-        <table class="claims-table">
-          <thead>
+      <div class="p-4 shadow-md rounded-lg overflow-x-auto">
+        <table class="w-full border-separate border-spacing-y-2">
+          <thead class="bg-gray-50">
             <tr>
-              <th class="claim-id">Claim ID</th>
-              <th class="patient">Patient</th>
-              <th class="band">Band</th>
-              <th class="performer">Performer</th>
-              <th class="status">Status</th>
-              <th class="submission-date">Submission Date</th>
-              <th class="actions">Actions</th>
+              <th class="py-4 px-5 text-left text-sm leading-normal text-gray-800 font-semibold border-b-2 border-gray-200 whitespace-nowrap">Claim ID</th>
+              <th class="py-4 px-5 text-left text-sm leading-normal text-gray-800 font-semibold border-b-2 border-gray-200 whitespace-nowrap">Patient</th>
+              <th class="py-4 px-5 text-left text-sm leading-normal text-gray-800 font-semibold border-b-2 border-gray-200 whitespace-nowrap">Band</th>
+              <th class="py-4 px-5 text-left text-sm leading-normal text-gray-800 font-semibold border-b-2 border-gray-200 whitespace-nowrap">Performer</th>
+              <th class="py-4 px-5 text-left text-sm leading-normal text-gray-800 font-semibold border-b-2 border-gray-200 whitespace-nowrap">Status</th>
+              <th class="py-4 px-5 text-left text-sm leading-normal text-gray-800 font-semibold border-b-2 border-gray-200 whitespace-nowrap">Submission Date</th>
+              <th class="py-4 px-5 text-left text-sm leading-normal text-gray-800 font-semibold border-b-2 border-gray-200 whitespace-nowrap">Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="claim in paginatedClaims" :key="claim.id">
-              <td>{{ claim.id }}</td>
-              <td>{{ claim.patient }}</td>
-              <td>{{ claim.band }}</td>
-              <td>{{ claim.performer }}</td>
-              <td>
-                <span :class="['status-badge', getStatusClass(claim.status)]">{{
+            <tr v-for="claim in paginatedClaims" :key="claim.id" class="hover:bg-gray-50">
+              <td class="py-4 px-5 text-sm text-gray-600 border-b border-gray-200 bg-white whitespace-nowrap">{{ claim.id }}</td>
+              <td class="py-4 px-5 text-sm text-gray-600 border-b border-gray-200 bg-white whitespace-nowrap">{{ claim.patient }}</td>
+              <td class="py-4 px-5 text-sm text-gray-600 border-b border-gray-200 bg-white whitespace-nowrap">{{ claim.band }}</td>
+              <td class="py-4 px-5 text-sm text-gray-600 border-b border-gray-200 bg-white whitespace-nowrap">{{ claim.performer }}</td>
+              <td class="py-4 px-5 text-sm text-gray-600 border-b border-gray-200 bg-white whitespace-nowrap">
+                <span :class="['inline-block py-1 px-3 rounded-full font-semibold text-xs capitalize', getStatusClass(claim.status)]">{{
                   claim.status
                 }}</span>
               </td>
-              <td>{{ claim.submissionDate }}</td>
-              <td class="action-buttons">
-                <button
-                  v-if="claim.status === 'Error' || claim.status === 'Rejected'"
-                  class="action-link"
-                  @click="openModal('Fix & Resubmit', claim)"
-                >
-                  Fix & Resubmit
-                </button>
-                <button class="action-link" @click="openModal('View Claim', claim)">
-                  View Claim
-                </button>
-                <button class="action-link" @click="openModal('View XML', claim)">
-                  View XML
-                </button>
+              <td class="py-4 px-5 text-sm text-gray-600 border-b border-gray-200 bg-white whitespace-nowrap">{{ claim.submissionDate }}</td>
+              <td class="py-4 px-5 text-sm text-gray-600 border-b border-gray-200 bg-white whitespace-nowrap">
+                <div class="flex gap-3 flex-wrap">
+                  <button
+                    v-if="claim.status === 'Error' || claim.status === 'Rejected'"
+                    class="bg-none border-none p-0 m-0 text-sm text-indigo-600 cursor-pointer underline whitespace-nowrap"
+                    @click="openModal('Fix & Resubmit', claim)"
+                  >
+                    Fix & Resubmit
+                  </button>
+                  <button class="bg-none border-none p-0 m-0 text-sm text-indigo-600 cursor-pointer underline whitespace-nowrap" @click="openModal('View Claim', claim)">
+                    View Claim
+                  </button>
+                  <button class="bg-none border-none p-0 m-0 text-sm text-indigo-600 cursor-pointer underline whitespace-nowrap" @click="openModal('View XML', claim)">
+                    View XML
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
         </table>
-        <div v-if="paginatedClaims.length === 0" class="no-data">
+        <div v-if="paginatedClaims.length === 0" class="text-center py-6 text-gray-500 italic">
           No claims found for this status.
         </div>
       </div>
 
       <!-- Pagination Controls -->
-      <div class="pagination-container">
+      <div class="flex justify-center items-center gap-4 py-4">
         <button
-          class="pagination-btn"
+          class="bg-indigo-600 text-white border-none rounded-lg py-2 px-4 cursor-pointer transition-colors hover:bg-indigo-700 disabled:bg-indigo-300 disabled:cursor-not-allowed"
           :disabled="currentPage === 1"
           @click="selectPage(currentPage - 1)"
         >
           Previous
         </button>
-        <span class="page-info">Page {{ currentPage }} of {{ totalPages }}</span>
+        <span class="text-sm text-gray-600">Page {{ currentPage }} of {{ totalPages }}</span>
         <button
-          class="pagination-btn"
+          class="bg-indigo-600 text-white border-none rounded-lg py-2 px-4 cursor-pointer transition-colors hover:bg-indigo-700 disabled:bg-indigo-300 disabled:cursor-not-allowed"
           :disabled="currentPage === totalPages"
           @click="selectPage(currentPage + 1)"
         >
@@ -122,69 +124,69 @@
       </div>
 
       <!-- Modal Popup -->
-      <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
-        <div class="modal-content-wrapper">
-          <div class="modal-header">
-            <h2 class="modal-title">{{ modalTitle }}</h2>
-            <button class="close-btn" @click="closeModal">&times;</button>
+      <div v-if="showModal" class="fixed inset-0 bg-black/50 flex justify-center items-center z-[1000]" @click.self="closeModal">
+        <div class="bg-white rounded-xl p-8 max-w-[600px] w-[90%] max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col">
+          <div class="flex justify-between items-center border-b border-gray-200 pb-3 mb-5">
+            <h2 class="text-2xl font-bold text-gray-800 m-0">{{ modalTitle }}</h2>
+            <button class="bg-none border-none text-3xl cursor-pointer text-gray-500 p-0" @click="closeModal">&times;</button>
           </div>
-          <div class="modal-body">
+          <div class="pt-3">
             <!-- New Claim Form -->
             <div v-if="modalType === 'New Claim' || modalType === 'Fix & Resubmit'">
-              <h3 class="modal-subtitle">Claim Details</h3>
-              <div class="form-grid">
-                <div class="form-field">
-                  <label for="patientName" class="label">Patient Name</label>
+              <h3 class="text-lg font-semibold text-gray-800 mb-4">Claim Details</h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div class="flex flex-col">
+                  <label for="patientName" class="text-sm font-medium text-gray-700 mb-1.5">Patient Name</label>
                   <input
                     type="text"
                     id="patientName"
                     v-model="form.patient"
-                    class="input"
+                    class="py-2.5 px-3 border border-gray-300 rounded-md text-base text-gray-800 bg-gray-50 focus:outline-none focus:border-indigo-600 focus:ring-[3px] focus:ring-indigo-600/20"
                   />
                 </div>
-                <div class="form-field">
-                  <label for="claimId" class="label">Claim ID</label>
+                <div class="flex flex-col">
+                  <label for="claimId" class="text-sm font-medium text-gray-700 mb-1.5">Claim ID</label>
                   <input
                     type="text"
                     id="claimId"
                     v-model="form.id"
-                    class="input"
+                    class="py-2.5 px-3 border border-gray-300 rounded-md text-base text-gray-800 bg-gray-50 focus:outline-none focus:border-indigo-600 focus:ring-[3px] focus:ring-indigo-600/20 disabled:opacity-50"
                     :disabled="modalType === 'Fix & Resubmit'"
                   />
                 </div>
-                <div class="form-field">
-                  <label for="band" class="label">Band</label>
-                  <select id="band" v-model="form.band" class="input">
+                <div class="flex flex-col">
+                  <label for="band" class="text-sm font-medium text-gray-700 mb-1.5">Band</label>
+                  <select id="band" v-model="form.band" class="py-2.5 px-3 border border-gray-300 rounded-md text-base text-gray-800 bg-gray-50 focus:outline-none focus:border-indigo-600 focus:ring-[3px] focus:ring-indigo-600/20">
                     <option value="Band 1">Band 1</option>
                     <option value="Band 2">Band 2</option>
                     <option value="Band 3">Band 3</option>
                   </select>
                 </div>
-                <div class="form-field">
-                  <label for="performer" class="label">Performer</label>
+                <div class="flex flex-col">
+                  <label for="performer" class="text-sm font-medium text-gray-700 mb-1.5">Performer</label>
                   <input
                     type="text"
                     id="performer"
                     v-model="form.performer"
-                    class="input"
+                    class="py-2.5 px-3 border border-gray-300 rounded-md text-base text-gray-800 bg-gray-50 focus:outline-none focus:border-indigo-600 focus:ring-[3px] focus:ring-indigo-600/20"
                   />
                 </div>
-                <div class="form-field">
-                  <label for="submissionDate" class="label">Submission Date</label>
+                <div class="flex flex-col">
+                  <label for="submissionDate" class="text-sm font-medium text-gray-700 mb-1.5">Submission Date</label>
                   <input
                     type="date"
                     id="submissionDate"
                     v-model="form.submissionDate"
-                    class="input"
+                    class="py-2.5 px-3 border border-gray-300 rounded-md text-base text-gray-800 bg-gray-50 focus:outline-none focus:border-indigo-600 focus:ring-[3px] focus:ring-indigo-600/20"
                   />
                 </div>
-                <div class="form-field">
-                  <label for="status" class="label">Status</label>
-                  <input type="text" id="status" v-model="form.status" class="input" />
+                <div class="flex flex-col">
+                  <label for="status" class="text-sm font-medium text-gray-700 mb-1.5">Status</label>
+                  <input type="text" id="status" v-model="form.status" class="py-2.5 px-3 border border-gray-300 rounded-md text-base text-gray-800 bg-gray-50 focus:outline-none focus:border-indigo-600 focus:ring-[3px] focus:ring-indigo-600/20" />
                 </div>
               </div>
-              <div class="form-actions">
-                <button class="submit-btn" @click="closeModal">
+              <div class="flex justify-end mt-6">
+                <button class="bg-indigo-600 text-white py-3 px-6 rounded-lg border-none font-semibold cursor-pointer transition-colors hover:bg-indigo-700" @click="closeModal">
                   {{ modalType === "New Claim" ? "Create Claim" : "Save Changes" }}
                 </button>
               </div>
@@ -192,56 +194,53 @@
 
             <!-- View Claim Details -->
             <div v-else-if="modalType === 'View Claim'">
-              <h3 class="modal-subtitle">Claim Details</h3>
-              <div class="details-grid">
-                <div class="detail-item">
-                  <span class="label-text">Claim ID:</span>
-                  <span class="detail-text">{{ selectedClaim.id }}</span>
+              <h3 class="text-lg font-semibold text-gray-800 mb-4">Claim Details</h3>
+              <div class="grid gap-4">
+                <div class="flex flex-col">
+                  <span class="text-sm font-medium text-gray-500 mb-1">Claim ID:</span>
+                  <span class="text-base font-semibold text-gray-800">{{ selectedClaim.id }}</span>
                 </div>
-                <div class="detail-item">
-                  <span class="label-text">Patient:</span>
-                  <span class="detail-text">{{ selectedClaim.patient }}</span>
+                <div class="flex flex-col">
+                  <span class="text-sm font-medium text-gray-500 mb-1">Patient:</span>
+                  <span class="text-base font-semibold text-gray-800">{{ selectedClaim.patient }}</span>
                 </div>
-                <div class="detail-item">
-                  <span class="label-text">Band:</span>
-                  <span class="detail-text">{{ selectedClaim.band }}</span>
+                <div class="flex flex-col">
+                  <span class="text-sm font-medium text-gray-500 mb-1">Band:</span>
+                  <span class="text-base font-semibold text-gray-800">{{ selectedClaim.band }}</span>
                 </div>
-                <div class="detail-item">
-                  <span class="label-text">Performer:</span>
-                  <span class="detail-text">{{ selectedClaim.performer }}</span>
+                <div class="flex flex-col">
+                  <span class="text-sm font-medium text-gray-500 mb-1">Performer:</span>
+                  <span class="text-base font-semibold text-gray-800">{{ selectedClaim.performer }}</span>
                 </div>
-                <div class="detail-item">
-                  <span class="label-text">Status:</span>
-                  <span class="detail-text"
-                    ><span
-                      :class="['status-badge', getStatusClass(selectedClaim.status)]"
-                      >{{ selectedClaim.status }}</span
-                    ></span
-                  >
+                <div class="flex flex-col">
+                  <span class="text-sm font-medium text-gray-500 mb-1">Status:</span>
+                  <span class="text-base font-semibold text-gray-800">
+                    <span :class="['inline-block py-1 px-3 rounded-full font-semibold text-xs capitalize', getStatusClass(selectedClaim.status)]">{{ selectedClaim.status }}</span>
+                  </span>
                 </div>
-                <div class="detail-item">
-                  <span class="label-text">Submission Date:</span>
-                  <span class="detail-text">{{ selectedClaim.submissionDate }}</span>
+                <div class="flex flex-col">
+                  <span class="text-sm font-medium text-gray-500 mb-1">Submission Date:</span>
+                  <span class="text-base font-semibold text-gray-800">{{ selectedClaim.submissionDate }}</span>
                 </div>
               </div>
             </div>
 
             <!-- View XML Data -->
             <div v-else-if="modalType === 'View XML'">
-              <h3 class="modal-subtitle">XML Data</h3>
-              <pre class="xml-block">{{ generateXML(selectedClaim) }}</pre>
+              <h3 class="text-lg font-semibold text-gray-800 mb-4">XML Data</h3>
+              <pre class="bg-gray-800 text-gray-200 p-4 rounded-lg overflow-x-auto font-mono">{{ generateXML(selectedClaim) }}</pre>
             </div>
 
             <!-- Submit Batch Confirmation -->
             <div v-else-if="modalType === 'Submit Batch'">
-              <h3 class="modal-subtitle">Batch Submission</h3>
-              <p class="modal-message">
+              <h3 class="text-lg font-semibold text-gray-800 mb-4">Batch Submission</h3>
+              <p class="text-base text-gray-700 leading-relaxed mb-6">
                 Are you sure you want to submit all pending claims as a batch?
                 <br />This action will group all claims with the status "Pending" and send
                 them to the NHS BSA EDI gateway.
               </p>
-              <div class="form-actions">
-                <button class="submit-btn" @click="performBatchSubmission">
+              <div class="flex justify-end">
+                <button class="bg-indigo-600 text-white py-3 px-6 rounded-lg border-none font-semibold cursor-pointer transition-colors hover:bg-indigo-700" @click="performBatchSubmission">
                   Confirm Submission
                 </button>
               </div>
@@ -393,15 +392,15 @@ const selectPage = (page) => {
 const getStatusClass = (status) => {
   switch (status) {
     case "Accepted":
-      return "status-accepted";
+      return "bg-green-100 text-green-800";
     case "Submitted":
-      return "status-submitted";
+      return "bg-blue-100 text-blue-800";
     case "Pending":
-      return "status-pending";
+      return "bg-yellow-200 text-yellow-800";
     case "Rejected":
-      return "status-rejected";
+      return "bg-red-100 text-red-700";
     case "Error":
-      return "status-error";
+      return "bg-red-200 text-red-700";
     default:
       return "";
   }
@@ -502,440 +501,3 @@ const downloadCSV = (tab) => {
   document.body.removeChild(link);
 };
 </script>
-
-<style scoped>
-/* Reset and global styles for this component */
-.main-container {
-  font-family: "Public Sans", "Noto Sans", sans-serif;
-  background-color: #f3f4f6;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  padding: 24px;
-}
-
-/* Card-like content container from ChartView */
-.content-container {
-  width: 100%;
-  max-width: 1400px; /* Increased max-width for a more spacious feel */
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  gap: 20px;
-  padding: 32px;
-}
-
-/* Header with buttons and tabs */
-.header-section {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-end; /* Align tabs to the bottom */
-  gap: 24px;
-  padding: 0 16px;
-  border-bottom: 1px solid #dbe0e6;
-  padding-bottom: 0;
-}
-
-.tab-nav {
-  display: flex;
-  gap: 32px;
-}
-
-.tab-item {
-  text-decoration: none;
-  color: #60758a;
-  padding: 16px 0 12px;
-  border-bottom: 3px solid transparent;
-  transition: border-color 0.3s, color 0.3s;
-  cursor: pointer;
-}
-
-.tab-item p {
-  font-size: 14px;
-  font-weight: 700;
-  margin: 0;
-}
-
-.tab-item:hover,
-.tab-item.active {
-  color: #111418;
-}
-
-.tab-item.active {
-  border-bottom: 3px solid #111418;
-}
-
-.action-btn {
-  height: 40px;
-  padding: 0 20px;
-  background-color: #f0f2f5;
-  color: #111418;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s, transform 0.2s;
-}
-
-.action-btn:hover {
-  background-color: #e2e4e8;
-  transform: translateY(-2px);
-}
-
-.new-claim-btn,
-.submit-batch-btn,
-.reports-btn {
-  font-weight: 700;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.submit-batch-btn {
-  background-color: #0d80f2;
-  color: white;
-}
-
-.submit-batch-btn:hover {
-  background-color: #0c72d9;
-}
-
-.search-bar {
-  padding: 12px 16px;
-}
-
-.search-input-wrapper {
-  display: flex;
-  align-items: center;
-  height: 48px;
-  width: 100%;
-  background-color: #f0f2f5;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-.search-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-left: 16px;
-  color: #60758a;
-}
-
-.search-input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  height: 100%;
-  padding: 0 16px 0 8px;
-  font-size: 16px;
-  color: #111418;
-}
-
-.search-input::placeholder {
-  color: #60758a;
-}
-
-.search-input:focus {
-  outline: none;
-}
-
-/* Beautiful Table Styles */
-.table-container {
-  padding: 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  border-radius: 8px;
-  overflow-x: auto;
-}
-
-.claims-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 8px;
-}
-
-.claims-table thead {
-  background-color: #f9fafb;
-}
-
-.claims-table th,
-.claims-table td {
-  padding: 16px 20px;
-  text-align: left;
-  font-size: 14px;
-  line-height: 1.5;
-  white-space: nowrap;
-}
-
-.claims-table th {
-  color: #1f2937;
-  font-weight: 600;
-  border-bottom: 2px solid #e5e7eb;
-}
-
-.claims-table td {
-  color: #4b5563;
-  font-weight: 400;
-  border-bottom: 1px solid #e5e7eb;
-  background-color: #fff;
-}
-
-.claims-table tbody tr:hover td {
-  background-color: #f5f7f9;
-}
-
-.status-badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 9999px;
-  font-weight: 600;
-  font-size: 12px;
-  text-transform: capitalize;
-}
-
-.status-accepted {
-  background-color: #d1fae5;
-  color: #065f46;
-}
-
-.status-submitted {
-  background-color: #d1e5fa;
-  color: #065f8a;
-}
-
-.status-pending {
-  background-color: #fde68a;
-  color: #92400e;
-}
-
-.status-rejected {
-  background-color: #fee2e2;
-  color: #991b1b;
-}
-
-.status-error {
-  background-color: #fecaca;
-  color: #b91c1c;
-}
-
-.action-buttons {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.action-link {
-  background: none;
-  border: none;
-  padding: 0;
-  margin: 0;
-  font-size: 14px;
-  color: #4f46e5;
-  cursor: pointer;
-  text-decoration: underline;
-  white-space: nowrap;
-}
-
-.no-data {
-  text-align: center;
-  padding: 24px;
-  color: #6b7280;
-  font-style: italic;
-}
-
-/* Pagination Styles */
-.pagination-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  padding: 16px;
-}
-
-.pagination-btn {
-  background-color: #4f46e5;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.pagination-btn:hover:not(:disabled) {
-  background-color: #4338ca;
-}
-
-.pagination-btn:disabled {
-  background-color: #a5b4fc;
-  cursor: not-allowed;
-}
-
-.page-info {
-  font-size: 14px;
-  color: #4b5563;
-}
-
-/* Modal Styles */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content-wrapper {
-  background-color: white;
-  border-radius: 12px;
-  padding: 32px;
-  max-width: 600px;
-  width: 90%;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #e5e7eb;
-  padding-bottom: 12px;
-  margin-bottom: 20px;
-}
-
-.modal-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: #1f2937;
-  margin: 0;
-}
-
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 28px;
-  cursor: pointer;
-  color: #6b7280;
-  padding: 0;
-}
-
-.modal-body {
-  padding-top: 12px;
-}
-
-.modal-subtitle {
-  font-size: 18px;
-  font-weight: 600;
-  color: #1f2937;
-  margin-bottom: 16px;
-}
-
-.modal-message {
-  font-size: 16px;
-  color: #374151;
-  line-height: 1.6;
-  margin-bottom: 24px;
-}
-
-/* Form Styles */
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-}
-
-.form-field {
-  display: flex;
-  flex-direction: column;
-}
-
-.label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #374151;
-  margin-bottom: 6px;
-}
-
-.input,
-.input select {
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 16px;
-  color: #1f2937;
-  background-color: #f9fafb;
-}
-
-.input:focus {
-  outline: none;
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-}
-
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 24px;
-}
-
-.submit-btn {
-  background-color: #4f46e5;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.submit-btn:hover {
-  background-color: #4338ca;
-}
-
-/* Detail View Styles */
-.details-grid {
-  display: grid;
-  gap: 16px;
-  grid-template-columns: 1fr;
-}
-
-.detail-item {
-  display: flex;
-  flex-direction: column;
-}
-
-.label-text {
-  font-size: 14px;
-  font-weight: 500;
-  color: #6b7280;
-  margin-bottom: 4px;
-}
-
-.detail-text {
-  font-size: 16px;
-  font-weight: 600;
-  color: #1f2937;
-}
-
-.xml-block {
-  background-color: #2d3748;
-  color: #e2e8f0;
-  padding: 16px;
-  border-radius: 8px;
-  overflow-x: auto;
-  font-family: monospace;
-}
-</style>

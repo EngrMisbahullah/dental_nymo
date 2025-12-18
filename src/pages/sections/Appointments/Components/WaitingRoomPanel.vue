@@ -1,64 +1,68 @@
 <template>
-  <div class="waiting-room-panel">
-    <div class="panel-header">
-      <div class="header-left">
-        <h3>
-          <i class="fas fa-clock"></i>
-          Waiting Room
-        </h3>
+  <div class="bg-white rounded-2xl flex flex-col h-full max-h-[calc(100vh-200px)] font-[Poppins]">
+    <!-- Panel Header -->
+    <div class="py-3 px-4 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-slate-50 to-white rounded-t-2xl">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-purple-accent to-secondary flex items-center justify-center shadow-md">
+          <i class="fas fa-clock  text-sm"></i>
+        </div>
+        <h3 class="text-sm font-bold text-slate-800 m-0">Waiting Room</h3>
       </div>
-      <div class="header-right">
-        <span class="patient-count" :class="{ 'has-overdue': hasOverduePatients }">
+      <div class="flex items-center gap-2">
+        <span :class="['px-3 py-1 rounded-full text-xs font-bold', hasOverduePatients ? 'bg-gradient-to-r from-red-500 to-orange-400 text-white animate-pulse' : 'bg-gradient-to-r from-purple-accent/10 to-secondary/10 text-purple-accent']">
           {{ waitingPatients.length }} Patients
         </span>
-        <button class="collapse-btn" @click="$emit('toggle-collapse')" title="Collapse panel">
-          <i class="fas fa-chevron-right"></i>
+        <button class="w-7 h-7 flex items-center justify-center bg-slate-100 border-none rounded-lg cursor-pointer text-slate-500 transition-all duration-200 hover:bg-purple-accent hover:text-white" @click="$emit('toggle-collapse')" title="Collapse panel">
+          <i class="fas fa-chevron-right text-xs"></i>
         </button>
       </div>
     </div>
 
     <!-- Empty State -->
-    <div v-if="waitingPatients.length === 0" class="empty-state">
-      <i class="fas fa-chair"></i>
-      <p>No patients in waiting room</p>
+    <div v-if="waitingPatients.length === 0" class="flex-1 flex flex-col items-center justify-center py-16 px-5 text-slate-400">
+      <div class="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mb-4">
+        <i class="fas fa-chair text-4xl text-slate-300"></i>
+      </div>
+      <p class="text-sm font-medium m-0">No patients in waiting room</p>
     </div>
 
     <!-- Patients List -->
-    <div v-else class="patients-list">
+    <div v-else class="flex-1 overflow-y-auto p-3 flex flex-col gap-2.5 scrollbar-thin">
       <div
         v-for="patient in sortedPatients"
         :key="patient.appointmentId"
-        class="patient-card"
-        :class="{ overdue: patient.waitTime > 20 }"
+        :class="['rounded-xl p-3.5 cursor-pointer transition-all duration-200 border-2', patient.waitTime > 20 ? 'bg-gradient-to-r from-red-50 to-orange-50 border-red-200 hover:border-red-400 hover:shadow-md hover:shadow-red-100' : 'bg-gradient-to-r from-slate-50 to-white border-slate-100 hover:border-purple-accent hover:shadow-md hover:shadow-purple-accent/10']"
         @click="selectPatient(patient)"
       >
-        <div class="patient-header">
-          <div class="patient-info">
-            <h4>{{ patient.patientName }}</h4>
-            <p class="practitioner">{{ patient.practitionerName }}</p>
+        <!-- Patient Header -->
+        <div class="flex justify-between items-start mb-2">
+          <div>
+            <h4 class="text-sm font-bold text-slate-800 m-0 mb-0.5">{{ patient.patientName }}</h4>
+            <p class="text-xs text-slate-500 m-0">{{ patient.practitionerName }}</p>
           </div>
-          <div class="wait-time" :class="{ alert: patient.waitTime > 20 }">
-            <i class="fas fa-clock"></i>
+          <div :class="['flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold', patient.waitTime > 20 ? 'bg-gradient-to-r from-red-500 to-orange-400 text-white animate-pulse' : 'bg-gradient-to-r from-purple-accent/10 to-secondary/10 text-purple-accent']">
+            <i class="fas fa-clock text-[10px]"></i>
             <span>{{ patient.waitTime }} min</span>
           </div>
         </div>
 
-        <div class="patient-details">
-          <div class="detail-item">
-            <i class="fas fa-calendar-check"></i>
+        <!-- Patient Details -->
+        <div class="flex flex-col gap-1.5 mb-3">
+          <div class="flex items-center gap-2 text-xs text-slate-500">
+            <i class="fas fa-calendar-check text-[10px] text-slate-400 w-3"></i>
             <span>{{ patient.appointmentTime }}</span>
           </div>
-          <div class="detail-item">
-            <i class="fas fa-sign-in-alt"></i>
+          <div class="flex items-center gap-2 text-xs text-slate-500">
+            <i class="fas fa-sign-in-alt text-[10px] text-slate-400 w-3"></i>
             <span>Check-in: {{ patient.checkInTime }}</span>
           </div>
         </div>
 
-        <div class="status-section">
+        <!-- Status Section -->
+        <div class="mb-3">
           <select
             v-model="patient.currentStatus"
-            class="status-dropdown"
-            :class="getStatusClass(patient.currentStatus)"
+            :class="['w-full py-2 px-3 border-2 rounded-xl text-xs font-bold cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-accent/30', getStatusClass(patient.currentStatus)]"
             @click.stop
             @change="updateStatus(patient)"
           >
@@ -73,33 +77,36 @@
         </div>
 
         <!-- Quick Actions -->
-        <div class="quick-actions">
+        <div class="flex gap-2">
           <button
             v-if="patient.currentStatus === 'Arrived'"
-            class="action-btn ready"
+            class="flex-1 py-2 px-3 border-none rounded-lg text-xs font-semibold cursor-pointer transition-all duration-200 flex items-center justify-center gap-1.5 bg-gradient-to-r from-emerald-400 to-green-500 text-white hover:shadow-md hover:-translate-y-0.5"
             @click.stop="markAsReady(patient)"
             title="Mark as Ready"
           >
             <i class="fas fa-check"></i>
+            Ready
           </button>
           <button
             v-if="patient.currentStatus === 'Ready'"
-            class="action-btn in-room"
+            class="flex-1 py-2 px-3 border-none rounded-lg text-xs font-semibold cursor-pointer transition-all duration-200 flex items-center justify-center gap-1.5 bg-gradient-to-r from-violet-500 to-purple-600 text-white hover:shadow-md hover:-translate-y-0.5"
             @click.stop="markAsInRoom(patient)"
             title="Move to Room"
           >
             <i class="fas fa-door-open"></i>
+            In Room
           </button>
           <button
             v-if="patient.currentStatus === 'InRoom'"
-            class="action-btn complete"
+            class="flex-1 py-2 px-3 border-none rounded-lg text-xs font-semibold cursor-pointer transition-all duration-200 flex items-center justify-center gap-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:shadow-md hover:-translate-y-0.5"
             @click.stop="markAsCompleted(patient)"
             title="Complete"
           >
             <i class="fas fa-check-double"></i>
+            Done
           </button>
           <button
-            class="action-btn info"
+            class="w-9 h-9 flex-shrink-0 py-2 px-3 border-none rounded-lg text-xs font-semibold cursor-pointer transition-all duration-200 flex items-center justify-center bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-700"
             @click.stop="viewDetails(patient)"
             title="View Details"
           >
@@ -110,13 +117,13 @@
     </div>
 
     <!-- Sort & Filter Controls -->
-    <div v-if="waitingPatients.length > 0" class="panel-footer">
-      <div class="filter-controls">
-        <label>
-          <i class="fas fa-sort"></i>
+    <div v-if="waitingPatients.length > 0" class="py-3 px-4 border-t border-slate-100 bg-gradient-to-r from-slate-50 to-white rounded-b-2xl">
+      <div class="flex items-center gap-3">
+        <label class="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
+          <i class="fas fa-sort text-purple-accent text-[10px]"></i>
           Sort:
         </label>
-        <select v-model="sortBy" class="sort-select">
+        <select v-model="sortBy" class="flex-1 py-2 px-3 border-2 border-slate-200 rounded-xl text-xs bg-white cursor-pointer transition-all duration-200 focus:outline-none focus:border-purple-accent focus:ring-2 focus:ring-purple-accent/20 font-medium">
           <option value="waitTime">Wait Time</option>
           <option value="appointmentTime">Appointment Time</option>
           <option value="checkInTime">Check-in Time</option>
@@ -236,15 +243,15 @@ const convertTo24Hour = (time) => {
 
 const getStatusClass = (status) => {
   const classes = {
-    'Unconfirmed': 'status-unconfirmed',
-    'Confirmed': 'status-confirmed',
-    'Arrived': 'status-arrived',
-    'Ready': 'status-ready',
-    'InRoom': 'status-inroom',
-    'ChkOut': 'status-chkout',
-    'Completed': 'status-completed'
+    'Unconfirmed': 'bg-slate-100 border-slate-200 text-slate-600',
+    'Confirmed': 'bg-blue-50 border-blue-200 text-blue-700',
+    'Arrived': 'bg-amber-50 border-amber-200 text-amber-700',
+    'Ready': 'bg-emerald-50 border-emerald-200 text-emerald-700',
+    'InRoom': 'bg-violet-50 border-violet-200 text-violet-700',
+    'ChkOut': 'bg-cyan-50 border-cyan-200 text-cyan-700',
+    'Completed': 'bg-green-50 border-green-300 text-green-700'
   };
-  return classes[status] || '';
+  return classes[status] || 'bg-slate-100 border-slate-200 text-slate-600';
 };
 
 const selectPatient = (patient) => {
@@ -322,189 +329,22 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.waiting-room-panel {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  max-height: calc(100vh - 200px);
+.scrollbar-thin::-webkit-scrollbar {
+  width: 5px;
 }
 
-.panel-header {
-  padding: 10px 12px;
-  border-bottom: 1px solid #e5e7eb;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #f9fafb;
-}
-
-.header-left {
-  display: flex;
-  align-items: center;
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.panel-header h3 {
-  font-size: 13px;
-  font-weight: 600;
-  color: #111827;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.panel-header h3 i {
-  color: #4f46e5;
-  font-size: 14px;
-}
-
-.patient-count {
-  background: #eff6ff;
-  color: #1e40af;
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.patient-count.has-overdue {
-  background: #fef2f2;
-  color: #991b1b;
-}
-
-.collapse-btn {
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 4px;
-  cursor: pointer;
-  color: #6b7280;
-  transition: all 0.2s;
-}
-
-.collapse-btn:hover {
-  background: #f3f4f6;
-  border-color: #d1d5db;
-}
-
-.empty-state {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 60px 20px;
-  color: #9ca3af;
-}
-
-.empty-state i {
-  font-size: 64px;
-  margin-bottom: 16px;
-  color: #d1d5db;
-}
-
-.empty-state p {
-  font-size: 14px;
-  margin: 0;
-}
-
-.patients-list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-/* Custom scrollbar */
-.patients-list::-webkit-scrollbar {
-  width: 6px;
-}
-
-.patients-list::-webkit-scrollbar-track {
-  background: #f3f4f6;
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #f1f5f9;
   border-radius: 10px;
 }
 
-.patients-list::-webkit-scrollbar-thumb {
-  background: #d1d5db;
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
   border-radius: 10px;
 }
 
-.patients-list::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
-}
-
-.patient-card {
-  background: #f9fafb;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 10px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.patient-card:hover {
-  border-color: #4f46e5;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
-  transform: translateY(-2px);
-}
-
-.patient-card.overdue {
-  border-color: #fca5a5;
-  background: #fef2f2;
-}
-
-.patient-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 6px;
-}
-
-.patient-info h4 {
-  font-size: 12px;
-  font-weight: 600;
-  color: #111827;
-  margin: 0 0 2px 0;
-}
-
-.patient-info .practitioner {
-  font-size: 10px;
-  color: #6b7280;
-  margin: 0;
-}
-
-.wait-time {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 8px;
-  background: #e0e7ff;
-  color: #3730a3;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.wait-time.alert {
-  background: #fee2e2;
-  color: #991b1b;
-  animation: pulse 2s infinite;
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 @keyframes pulse {
@@ -512,189 +352,7 @@ onBeforeUnmount(() => {
     opacity: 1;
   }
   50% {
-    opacity: 0.7;
+    opacity: 0.8;
   }
-}
-
-.wait-time i {
-  font-size: 11px;
-}
-
-.patient-details {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-bottom: 8px;
-}
-
-.detail-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 10px;
-  color: #6b7280;
-}
-
-.detail-item i {
-  font-size: 9px;
-  color: #9ca3af;
-  width: 12px;
-}
-
-.status-section {
-  margin-bottom: 8px;
-}
-
-.status-dropdown {
-  width: 100%;
-  padding: 6px 10px;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.status-dropdown:focus {
-  outline: none;
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-}
-
-.status-unconfirmed {
-  background: #f3f4f6;
-  color: #6b7280;
-}
-
-.status-confirmed {
-  background: #dbeafe;
-  color: #1e40af;
-}
-
-.status-arrived {
-  background: #fef3c7;
-  color: #92400e;
-}
-
-.status-ready {
-  background: #d1fae5;
-  color: #065f46;
-}
-
-.status-inroom {
-  background: #e9d5ff;
-  color: #6b21a8;
-}
-
-.status-chkout {
-  background: #ccfbf1;
-  color: #134e4a;
-}
-
-.status-completed {
-  background: #bbf7d0;
-  color: #14532d;
-}
-
-.quick-actions {
-  display: flex;
-  gap: 4px;
-}
-
-.action-btn {
-  flex: 1;
-  padding: 6px;
-  border: none;
-  border-radius: 5px;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.action-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-}
-
-.action-btn.ready {
-  background: #d1fae5;
-  color: #065f46;
-}
-
-.action-btn.ready:hover {
-  background: #a7f3d0;
-}
-
-.action-btn.in-room {
-  background: #e9d5ff;
-  color: #6b21a8;
-}
-
-.action-btn.in-room:hover {
-  background: #d8b4fe;
-}
-
-.action-btn.complete {
-  background: #bfdbfe;
-  color: #1e40af;
-}
-
-.action-btn.complete:hover {
-  background: #93c5fd;
-}
-
-.action-btn.info {
-  background: #f3f4f6;
-  color: #6b7280;
-}
-
-.action-btn.info:hover {
-  background: #e5e7eb;
-}
-
-.panel-footer {
-  padding: 10px 12px;
-  border-top: 1.5px solid #e5e7eb;
-  background: #f9fafb;
-}
-
-.filter-controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.filter-controls label {
-  font-size: 11px;
-  font-weight: 500;
-  color: #6b7280;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.filter-controls i {
-  font-size: 10px;
-}
-
-.sort-select {
-  flex: 1;
-  padding: 4px 8px;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 6px;
-  font-size: 11px;
-  background: white;
-  cursor: pointer;
-}
-
-.sort-select:focus {
-  outline: none;
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 </style>

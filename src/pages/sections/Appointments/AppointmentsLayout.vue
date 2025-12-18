@@ -1,71 +1,76 @@
 <template>
-  <div class="appointments-container">
+  <div class="flex flex-col h-[calc(100vh-80px)] bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 p-4 gap-4 font-[Poppins]">
     <!-- Top Toolbar -->
-    <div class="toolbar">
-      <div class="toolbar-left">
-        <button class="btn-primary" @click="openNewAppointment">
-          <i class="fas fa-plus"></i>
+    <div class="flex items-center justify-between bg-white py-3 px-5 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.06)] gap-4 flex-wrap relative border border-slate-100">
+      <div class="flex items-center gap-4">
+        <button 
+          class="flex items-center gap-2 py-2.5 px-5 bg-gradient-to-r from-purple-accent to-secondary text-white border-none rounded-xl text-sm font-semibold cursor-pointer transition-all duration-300 hover:shadow-lg hover:shadow-purple-accent/30 hover:-translate-y-0.5 active:translate-y-0" 
+          @click="openNewAppointment"
+        >
+          <i class="fas fa-plus text-xs"></i>
           <span>New Appointment</span>
         </button>
-        <div class="view-toggle">
+        <div class="flex bg-slate-100 rounded-xl p-1 shadow-inner">
           <button
-            :class="{ active: viewMode === 'day' }"
+            :class="['py-2 px-4 border-none text-sm cursor-pointer transition-all duration-200 rounded-lg font-medium', viewMode === 'day' ? 'bg-white text-purple-accent shadow-md' : 'bg-transparent text-slate-500 hover:text-purple-accent']"
             @click="viewMode = 'day'"
           >Day</button>
           <button
-            :class="{ active: viewMode === 'week' }"
+            :class="['py-2 px-4 border-none text-sm cursor-pointer transition-all duration-200 rounded-lg font-medium', viewMode === 'week' ? 'bg-white text-purple-accent shadow-md' : 'bg-transparent text-slate-500 hover:text-purple-accent']"
             @click="viewMode = 'week'"
           >Week</button>
         </div>
       </div>
 
-      <div class="toolbar-center">
-        <button @click="prevDay" class="nav-arrow">
-          <i class="fas fa-chevron-left"></i>
+      <div class="flex items-center gap-3">
+        <button @click="prevDay" class="w-9 h-9 flex items-center justify-center bg-slate-50 border border-slate-200 rounded-xl cursor-pointer text-slate-500 transition-all duration-200 hover:bg-white hover:border-purple-accent hover:text-purple-accent hover:shadow-md">
+          <i class="fas fa-chevron-left text-sm"></i>
         </button>
-        <div class="date-picker" @click="toggleCalendarPopup">
-          <span class="current-date">{{ formattedCurrentDate }}</span>
-          <i class="fas fa-calendar-alt"></i>
+        <div 
+          class="flex items-center gap-3 py-2.5 px-4 bg-gradient-to-r from-slate-50 to-white border border-slate-200 rounded-xl cursor-pointer transition-all duration-200 hover:border-purple-accent hover:shadow-md group" 
+          @click="toggleCalendarPopup"
+        >
+          <i class="fas fa-calendar-alt text-purple-accent text-sm group-hover:scale-110 transition-transform"></i>
+          <span class="text-sm font-semibold text-slate-700">{{ formattedCurrentDate }}</span>
         </div>
-        <button @click="nextDay" class="nav-arrow">
-          <i class="fas fa-chevron-right"></i>
+        <button @click="nextDay" class="w-9 h-9 flex items-center justify-center bg-slate-50 border border-slate-200 rounded-xl cursor-pointer text-slate-500 transition-all duration-200 hover:bg-white hover:border-purple-accent hover:text-purple-accent hover:shadow-md">
+          <i class="fas fa-chevron-right text-sm"></i>
         </button>
-        <div class="quick-nav">
-          <button @click="prevWeek" :class="{ active: activeNav === 'prev-week' }">-1W</button>
-          <button @click="goToToday" :class="{ active: activeNav === 'today' }">Today</button>
-          <button @click="nextWeek" :class="{ active: activeNav === 'next-week' }">+1W</button>
-          <button @click="nextMonth" :class="{ active: activeNav === 'next-month' }">+1M</button>
+        <div class="flex gap-1.5 ml-2">
+          <button @click="prevWeek" :class="['py-2 px-3 border border-slate-200 rounded-lg text-xs cursor-pointer transition-all duration-200 font-medium', activeNav === 'prev-week' ? 'bg-purple-accent text-white border-purple-accent shadow-md' : 'bg-white text-slate-500 hover:border-purple-accent hover:text-purple-accent']">-1W</button>
+          <button @click="goToToday" :class="['py-2 px-3 border border-slate-200 rounded-lg text-xs cursor-pointer transition-all duration-200 font-medium', activeNav === 'today' ? 'bg-purple-accent text-white border-purple-accent shadow-md' : 'bg-white text-slate-500 hover:border-purple-accent hover:text-purple-accent']">Today</button>
+          <button @click="nextWeek" :class="['py-2 px-3 border border-slate-200 rounded-lg text-xs cursor-pointer transition-all duration-200 font-medium', activeNav === 'next-week' ? 'bg-purple-accent text-white border-purple-accent shadow-md' : 'bg-white text-slate-500 hover:border-purple-accent hover:text-purple-accent']">+1W</button>
+          <button @click="nextMonth" :class="['py-2 px-3 border border-slate-200 rounded-lg text-xs cursor-pointer transition-all duration-200 font-medium', activeNav === 'next-month' ? 'bg-purple-accent text-white border-purple-accent shadow-md' : 'bg-white text-slate-500 hover:border-purple-accent hover:text-purple-accent']">+1M</button>
         </div>
       </div>
 
-      <div class="toolbar-right">
-        <div class="search-box">
-          <i class="fas fa-search"></i>
-          <input type="text" v-model="searchQuery" placeholder="Search patient...">
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 py-2.5 px-4 bg-slate-50 border border-slate-200 rounded-xl min-w-[200px] transition-all duration-200 focus-within:border-purple-accent focus-within:bg-white focus-within:shadow-md">
+          <i class="fas fa-search text-slate-400 text-sm"></i>
+          <input type="text" v-model="searchQuery" placeholder="Search patient..." class="border-none bg-transparent outline-none text-sm w-full text-slate-700 placeholder-slate-400 font-medium">
         </div>
       </div>
 
       <!-- Calendar Popup -->
-      <div v-show="isCalendarPopupVisible" class="calendar-popup" @click.stop>
-        <div class="popup-header">
-          <button @click="calendarPrevMonth" class="popup-nav-button">
+      <div v-show="isCalendarPopupVisible" class="absolute top-full left-1/2 -translate-x-1/2 mt-3 bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.12)] p-5 z-[100] w-[300px] border border-slate-100" @click.stop>
+        <div class="flex justify-between items-center mb-4">
+          <button @click="calendarPrevMonth" class="w-8 h-8 flex items-center justify-center bg-slate-50 border-none rounded-lg cursor-pointer text-slate-500 hover:bg-purple-accent hover:text-white transition-all duration-200">
             <i class="fas fa-chevron-left"></i>
           </button>
-          <div class="popup-month-year">{{ calendarMonthYear }}</div>
-          <button @click="calendarNextMonth" class="popup-nav-button">
+          <div class="font-semibold text-sm text-slate-800">{{ calendarMonthYear }}</div>
+          <button @click="calendarNextMonth" class="w-8 h-8 flex items-center justify-center bg-slate-50 border-none rounded-lg cursor-pointer text-slate-500 hover:bg-purple-accent hover:text-white transition-all duration-200">
             <i class="fas fa-chevron-right"></i>
           </button>
         </div>
-        <div class="popup-days-grid">
-          <div v-for="dayName in ['S', 'M', 'T', 'W', 'T', 'F', 'S']" :key="dayName" class="day-name">
+        <div class="grid grid-cols-7 gap-1.5">
+          <div v-for="dayName in ['S', 'M', 'T', 'W', 'T', 'F', 'S']" :key="dayName" class="text-xs font-semibold text-slate-400 text-center p-2">
             {{ dayName }}
           </div>
           <div v-for="(day, index) in calendarDays" :key="index">
             <button
               v-if="day.date"
               @click="selectDate(day.date)"
-              class="day-button"
-              :class="{ 'selected-day': day.isCurrent }"
+              :class="['w-9 h-9 border-none rounded-lg text-sm cursor-pointer transition-all duration-200', day.isCurrent ? 'bg-gradient-to-r from-purple-accent to-secondary text-white shadow-md' : 'bg-transparent text-slate-600 hover:bg-purple-accent/10 hover:text-purple-accent']"
             >
               {{ day.day }}
             </button>
@@ -75,89 +80,98 @@
     </div>
 
     <!-- Main Three-Zone Layout -->
-    <div class="main-layout" :class="layoutClasses">
+    <div class="grid gap-4 flex-1 min-h-0 transition-all duration-300" :class="layoutClasses" :style="mainLayoutStyle">
       <!-- Left Filters Panel -->
-      <div class="filters-panel" :class="{ collapsed: isFiltersCollapsed }">
-        <div class="panel-header">
-          <span v-if="!isFiltersCollapsed">Filters</span>
-          <button class="collapse-btn" @click="toggleFilters" :title="isFiltersCollapsed ? 'Expand filters' : 'Collapse filters'">
-            <i class="fas" :class="isFiltersCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'"></i>
+      <div :class="['bg-white rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.06)] flex flex-col overflow-hidden transition-all duration-300 border border-slate-100', { 'w-12': isFiltersCollapsed }]">
+        <div :class="['flex items-center justify-between p-3.5 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white', { 'justify-center px-2': isFiltersCollapsed }]">
+          <span v-if="!isFiltersCollapsed" class="font-semibold text-sm text-slate-700 flex items-center gap-2">
+            <i class="fas fa-filter text-purple-accent"></i>
+            Filters
+          </span>
+          <button class="w-7 h-7 flex items-center justify-center bg-slate-100 border-none rounded-lg cursor-pointer text-slate-500 transition-all duration-200 hover:bg-purple-accent hover:text-white" @click="toggleFilters" :title="isFiltersCollapsed ? 'Expand filters' : 'Collapse filters'">
+            <i class="fas text-xs" :class="isFiltersCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'"></i>
           </button>
         </div>
 
-        <div v-if="!isFiltersCollapsed" class="filters-content">
+        <div v-if="!isFiltersCollapsed" class="flex-1 overflow-y-auto p-4 scrollbar-thin">
           <!-- Practitioners Filter -->
-          <div class="filter-section">
-            <div class="filter-title">
-              <i class="fas fa-user-md"></i>
+          <div class="mb-5">
+            <div class="flex items-center gap-2 text-xs font-bold text-slate-600 mb-3 uppercase tracking-wider">
+              <div class="w-6 h-6 rounded-lg bg-gradient-to-r from-primary to-primary-dark flex items-center justify-center">
+                <i class="fas fa-user-md text-white text-[10px]"></i>
+              </div>
               <span>Practitioners</span>
             </div>
-            <div class="filter-actions">
-              <a href="#" @click.prevent="selectAllPractitioners">All</a>
-              <a href="#" @click.prevent="clearAllPractitioners">None</a>
+            <div class="flex gap-3 mb-3">
+              <a href="#" @click.prevent="selectAllPractitioners" class="text-xs text-purple-accent no-underline hover:underline font-medium">Select All</a>
+              <a href="#" @click.prevent="clearAllPractitioners" class="text-xs text-slate-400 no-underline hover:underline hover:text-slate-600 font-medium">Clear</a>
             </div>
-            <div class="checkbox-list">
-              <label v-for="prac in allPractitioners" :key="prac" class="checkbox-item">
-                <input type="checkbox" :value="prac" v-model="selectedPractitioners">
-                <span class="checkmark"></span>
-                <span class="label-text">{{ getShortName(prac) }}</span>
+            <div class="flex flex-col gap-1">
+              <label v-for="prac in allPractitioners" :key="prac" class="flex items-center gap-3 text-sm text-slate-600 cursor-pointer py-2 px-2.5 rounded-lg transition-all duration-200 hover:bg-slate-50 group">
+                <input type="checkbox" :value="prac" v-model="selectedPractitioners" class="w-4 h-4 accent-purple-accent cursor-pointer rounded">
+                <span class="whitespace-nowrap overflow-hidden text-ellipsis group-hover:text-slate-800">{{ getShortName(prac) }}</span>
               </label>
             </div>
           </div>
 
           <!-- Appointment Types Filter -->
-          <div class="filter-section">
-            <div class="filter-title">
-              <i class="fas fa-palette"></i>
+          <div class="mb-4">
+            <div class="flex items-center gap-2 text-xs font-bold text-slate-600 mb-3 uppercase tracking-wider">
+              <div class="w-6 h-6 rounded-lg bg-gradient-to-r from-revenue to-primary flex items-center justify-center">
+                <i class="fas fa-palette text-white text-[10px]"></i>
+              </div>
               <span>Appointment Types</span>
             </div>
-            <div class="filter-actions">
-              <a href="#" @click.prevent="selectAllTypes">All</a>
-              <a href="#" @click.prevent="clearAllTypes">None</a>
+            <div class="flex gap-3 mb-3">
+              <a href="#" @click.prevent="selectAllTypes" class="text-xs text-purple-accent no-underline hover:underline font-medium">Select All</a>
+              <a href="#" @click.prevent="clearAllTypes" class="text-xs text-slate-400 no-underline hover:underline hover:text-slate-600 font-medium">Clear</a>
             </div>
-            <div class="checkbox-list">
-              <label v-for="type in appointmentTypes" :key="type.id" class="checkbox-item">
-                <input type="checkbox" :value="type.id" v-model="selectedTypes">
-                <span class="checkmark"></span>
-                <span class="color-dot" :style="{ background: type.color }"></span>
-                <span class="label-text">{{ type.name }}</span>
+            <div class="flex flex-col gap-1">
+              <label v-for="type in appointmentTypes" :key="type.id" class="flex items-center gap-3 text-sm text-slate-600 cursor-pointer py-2 px-2.5 rounded-lg transition-all duration-200 hover:bg-slate-50 group">
+                <input type="checkbox" :value="type.id" v-model="selectedTypes" class="w-4 h-4 accent-purple-accent cursor-pointer rounded">
+                <span class="w-3 h-3 rounded-full flex-shrink-0 shadow-sm" :style="{ background: type.color }"></span>
+                <span class="whitespace-nowrap overflow-hidden text-ellipsis group-hover:text-slate-800">{{ type.name }}</span>
               </label>
             </div>
           </div>
         </div>
 
         <!-- Collapsed Icons -->
-        <div v-else class="collapsed-icons">
-          <button class="icon-btn" title="Practitioners" @click="toggleFilters">
+        <div v-else class="flex flex-col items-center gap-3 p-3 pt-4">
+          <button class="w-9 h-9 flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-50 border-none rounded-xl cursor-pointer text-slate-500 transition-all duration-200 hover:bg-gradient-to-r hover:from-purple-accent hover:to-secondary hover:text-white hover:shadow-md" title="Practitioners" @click="toggleFilters">
             <i class="fas fa-user-md"></i>
           </button>
-          <button class="icon-btn" title="Appointment Types" @click="toggleFilters">
+          <button class="w-9 h-9 flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-50 border-none rounded-xl cursor-pointer text-slate-500 transition-all duration-200 hover:bg-gradient-to-r hover:from-purple-accent hover:to-secondary hover:text-white hover:shadow-md" title="Appointment Types" @click="toggleFilters">
             <i class="fas fa-palette"></i>
           </button>
         </div>
       </div>
 
       <!-- Calendar Grid -->
-      <div class="calendar-wrapper">
-        <div class="calendar-grid" @dragover.prevent @drop="onDrop" :style="gridStyle">
-          <div class="grid-header-placeholder"></div>
+      <div class="bg-white rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.06)] overflow-auto min-h-0 border border-slate-100">
+        <div class="grid min-w-max" @dragover.prevent @drop="onDrop" :style="gridStyle">
+          <div class="border-b border-slate-200 sticky top-0 bg-gradient-to-r from-slate-50 to-white z-[2]"></div>
           <div
             v-for="practitioner in filteredPractitioners"
             :key="practitioner"
-            class="grid-header"
+            class="py-3 px-3 text-center font-semibold text-xs text-slate-700 border-b border-l border-slate-200 sticky top-0 bg-gradient-to-b from-white to-slate-50 z-[2] whitespace-nowrap"
           >
-            {{ getShortName(practitioner) }}
+            <div class="flex flex-col items-center gap-1">
+              <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-accent to-secondary flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                {{ practitioner.split(' ').map(n => n[0]).join('') }}
+              </div>
+              <span class="text-slate-600">{{ getShortName(practitioner) }}</span>
+            </div>
           </div>
 
           <template v-for="timeSlot in timeSlots" :key="timeSlot.time">
-            <div class="time-label" :style="{ gridRow: timeSlot.gridRow }">
+            <div class="px-2 text-right text-xs text-slate-400 flex items-start justify-end pt-1 font-medium" :style="{ gridRow: timeSlot.gridRow }">
               {{ timeSlot.label }}
             </div>
             <div
               v-for="(practitioner, pIndex) in filteredPractitioners"
               :key="practitioner"
-              class="time-slot"
-              :class="{ 'dashed-border': timeSlot.isHalfHour }"
+              :class="['h-7 border-b border-l cursor-pointer transition-all duration-150 hover:bg-purple-accent/5', timeSlot.isHalfHour ? 'border-dashed border-slate-100' : 'border-slate-200']"
               :style="{
                 gridRow: timeSlot.gridRow,
                 gridColumn: pIndex + 2,
@@ -171,39 +185,38 @@
           <div
             v-for="appt in filteredAppointments"
             :key="appt.id"
-            class="appointment"
-            :class="[typeClasses[appt.type], { 'is-dragging': draggedItemId === appt.id }]"
+            :class="['mx-1 my-0.5 p-2 px-2.5 rounded-xl text-xs cursor-grab overflow-hidden flex flex-col justify-between border-l-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200', typeClasses[appt.type], { 'opacity-50': draggedItemId === appt.id }]"
             :style="getAppointmentStyle(appt)"
             draggable="true"
             @dragstart="onDragStart(appt, $event)"
             @dragend="onDragEnd"
           >
-            <div class="appt-content">
-              <div class="appt-title">{{ appt.title }}</div>
-              <div v-if="appt.subtitle" class="appt-subtitle">{{ appt.subtitle }}</div>
-              <div v-if="appt.details" class="appt-details">{{ appt.details }}</div>
+            <div class="overflow-hidden">
+              <div class="font-bold whitespace-nowrap overflow-hidden text-ellipsis">{{ appt.title }}</div>
+              <div v-if="appt.subtitle" class="text-[11px] opacity-80 whitespace-nowrap overflow-hidden text-ellipsis mt-0.5">{{ appt.subtitle }}</div>
+              <div v-if="appt.details" class="text-[11px] opacity-70 whitespace-nowrap overflow-hidden text-ellipsis mt-0.5">{{ appt.details }}</div>
             </div>
-            <div class="appt-icons">
-              <i v-if="appt.type === 'private-only'" class="fas fa-heart text-red"></i>
-              <i v-if="appt.type === 'private-only'" class="fas fa-dollar-sign text-green"></i>
-              <i v-if="appt.confirmed" class="fas fa-check-circle text-blue"></i>
+            <div class="flex gap-1.5 justify-end mt-auto pt-1">
+              <i v-if="appt.type === 'private-only'" class="fas fa-heart text-[10px] text-red-400"></i>
+              <i v-if="appt.type === 'private-only'" class="fas fa-dollar-sign text-[10px] text-green-500"></i>
+              <i v-if="appt.confirmed" class="fas fa-check-circle text-[10px] text-blue-500"></i>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Waiting Room Panel -->
-      <div class="waiting-panel" :class="{ collapsed: isWaitingCollapsed }">
-        <div v-if="isWaitingCollapsed" class="collapsed-waiting">
-          <button class="expand-btn" @click="toggleWaiting" title="Expand waiting room">
-            <i class="fas fa-chevron-left"></i>
+      <div :class="['bg-white rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.06)] overflow-hidden flex flex-col transition-all duration-300 border border-slate-100', { 'w-[52px]': isWaitingCollapsed }]">
+        <div v-if="isWaitingCollapsed" class="flex flex-col items-center py-4 px-2 gap-4 h-full bg-gradient-to-b from-slate-50 to-white">
+          <button class="w-8 h-8 flex items-center justify-center bg-slate-100 border-none rounded-lg cursor-pointer text-slate-500 transition-all duration-200 hover:bg-purple-accent hover:text-white" @click="toggleWaiting" title="Expand waiting room">
+            <i class="fas fa-chevron-left text-xs"></i>
           </button>
-          <div class="waiting-badge" :class="{ 'has-alert': hasOverduePatients }">
+          <div :class="['w-8 h-8 flex items-center justify-center rounded-full text-xs font-bold shadow-sm', hasOverduePatients ? 'bg-gradient-to-r from-red-500 to-orange-400 text-white animate-pulse' : 'bg-gradient-to-r from-purple-accent to-secondary text-white']">
             {{ waitingCount }}
           </div>
-          <span class="vertical-text">Waiting</span>
+          <span class="vertical-text text-xs font-semibold text-slate-500 tracking-widest uppercase">Waiting</span>
         </div>
-        <div v-else class="waiting-content">
+        <div v-else class="flex-1 flex flex-col overflow-hidden">
           <WaitingRoomPanel
             :is-collapsed="isWaitingCollapsed"
             @toggle-collapse="toggleWaiting"
@@ -253,14 +266,14 @@ const selectedPractitioners = ref([...allPractitioners.value]);
 // Appointment types with colors
 const appointmentTypes = ref([
   { id: 'emergency', name: 'Emergency', color: '#ef4444' },
-  { id: 'private-only', name: 'Private', color: '#fef08a' },
-  { id: 'private-only-light', name: 'Private (Light)', color: '#f3e8ff' },
-  { id: 'nhs', name: 'NHS', color: '#bbf7d0' },
-  { id: 'nhs-light', name: 'NHS (Light)', color: '#a5f3fc' },
-  { id: 'exam', name: 'Exam', color: '#bfdbfe' },
+  { id: 'private-only', name: 'Private', color: '#fbbf24' },
+  { id: 'private-only-light', name: 'Private (Light)', color: '#c4b5fd' },
+  { id: 'nhs', name: 'NHS', color: '#34d899' },
+  { id: 'nhs-light', name: 'NHS (Light)', color: '#67e8f9' },
+  { id: 'exam', name: 'Exam', color: '#60a5fa' },
   { id: 'zoom', name: 'Zoom', color: '#4ade80' },
-  { id: 'blocked', name: 'Blocked', color: '#fca5a5' },
-  { id: 'other', name: 'Other', color: '#9ca3af' },
+  { id: 'blocked', name: 'Blocked', color: '#f87171' },
+  { id: 'other', name: 'Other', color: '#94a3b8' },
 ]);
 
 // Selected types (all selected by default)
@@ -296,22 +309,32 @@ const startTime = 9;
 const endTime = 17.5;
 
 const typeClasses = {
-  emergency: "type-emergency",
-  "private-only": "type-private",
-  "private-only-light": "type-private-light",
-  other: "type-other",
-  exam: "type-exam",
-  nhs: "type-nhs",
-  "nhs-light": "type-nhs-light",
-  blocked: "type-blocked",
-  zoom: "type-zoom",
+  emergency: "bg-gradient-to-r from-red-50 to-red-100 text-red-800 border-red-500",
+  "private-only": "bg-gradient-to-r from-amber-50 to-yellow-100 text-amber-800 border-amber-500",
+  "private-only-light": "bg-gradient-to-r from-violet-50 to-purple-100 text-violet-800 border-violet-400",
+  other: "bg-gradient-to-r from-slate-50 to-slate-100 text-slate-700 border-slate-400",
+  exam: "bg-gradient-to-r from-blue-50 to-blue-100 text-blue-800 border-blue-500",
+  nhs: "bg-gradient-to-r from-emerald-50 to-green-100 text-emerald-800 border-emerald-500",
+  "nhs-light": "bg-gradient-to-r from-cyan-50 to-cyan-100 text-cyan-800 border-cyan-400",
+  blocked: "bg-gradient-to-r from-red-50 to-red-100 text-red-700 border-red-400 opacity-70",
+  zoom: "bg-gradient-to-r from-green-100 to-emerald-200 text-green-800 border-green-500",
 };
 
 // Computed properties
 const layoutClasses = computed(() => ({
-  'filters-collapsed': isFiltersCollapsed.value,
-  'waiting-collapsed': isWaitingCollapsed.value,
+  'grid-cols-[48px_1fr_280px]': !isFiltersCollapsed.value && !isWaitingCollapsed.value,
+  'grid-cols-[48px_1fr_52px]': !isFiltersCollapsed.value && isWaitingCollapsed.value,
+  'grid-cols-[220px_1fr_280px]': isFiltersCollapsed.value && !isWaitingCollapsed.value,
+  'grid-cols-[220px_1fr_52px]': isFiltersCollapsed.value && isWaitingCollapsed.value,
 }));
+
+const mainLayoutStyle = computed(() => {
+  const filtersWidth = isFiltersCollapsed.value ? '48px' : '220px';
+  const waitingWidth = isWaitingCollapsed.value ? '52px' : '280px';
+  return {
+    gridTemplateColumns: `${filtersWidth} 1fr ${waitingWidth}`,
+  };
+});
 
 const filteredPractitioners = computed(() => {
   return allPractitioners.value.filter(p => selectedPractitioners.value.includes(p));
@@ -320,7 +343,7 @@ const filteredPractitioners = computed(() => {
 const gridStyle = computed(() => {
   const cols = filteredPractitioners.value.length;
   return {
-    gridTemplateColumns: `45px repeat(${cols}, minmax(120px, 1fr))`,
+    gridTemplateColumns: `50px repeat(${cols}, minmax(130px, 1fr))`,
   };
 });
 
@@ -496,7 +519,7 @@ const onDragEnd = () => {
 const onDrop = (event) => {
   event.preventDefault();
   const apptId = parseInt(event.dataTransfer.getData("text/plain"));
-  const targetSlot = event.target.closest(".time-slot");
+  const targetSlot = event.target.closest(".time-slot, [data-time]");
 
   if (apptId && targetSlot) {
     const newTime = parseFloat(targetSlot.dataset.time);
@@ -554,720 +577,26 @@ defineExpose({
 </script>
 
 <style scoped>
-/* CSS Variables */
-:root {
-  --filters-width: 200px;
-  --filters-collapsed: 44px;
-  --waiting-width: 280px;
-  --waiting-collapsed: 50px;
-  --toolbar-height: 52px;
-  --slot-height: 28px;
-}
-
-/* Container */
-.appointments-container {
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 80px);
-  background: #f3f5f7;
-  padding: 12px;
-  gap: 12px;
-}
-
-/* Toolbar */
-.toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: white;
-  padding: 10px 16px;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-  gap: 16px;
-  flex-wrap: wrap;
-  position: relative;
-}
-
-.toolbar-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.toolbar-center {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.toolbar-right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.btn-primary {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  background: #4f46e5;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.btn-primary:hover {
-  background: #4338ca;
-}
-
-.btn-primary i {
-  font-size: 12px;
-}
-
-.view-toggle {
-  display: flex;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  overflow: hidden;
-}
-
-.view-toggle button {
-  padding: 6px 12px;
-  background: white;
-  border: none;
-  font-size: 12px;
-  color: #6b7280;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.view-toggle button:not(:last-child) {
-  border-right: 1px solid #e5e7eb;
-}
-
-.view-toggle button.active {
-  background: #4f46e5;
-  color: white;
-}
-
-.nav-arrow {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  cursor: pointer;
-  color: #6b7280;
-  transition: all 0.2s;
-}
-
-.nav-arrow:hover {
-  background: #f9fafb;
-  border-color: #d1d5db;
-}
-
-.date-picker {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.date-picker:hover {
-  border-color: #4f46e5;
-}
-
-.current-date {
-  font-size: 14px;
-  font-weight: 600;
-  color: #1f2937;
-}
-
-.date-picker i {
-  color: #6b7280;
-  font-size: 12px;
-}
-
-.quick-nav {
-  display: flex;
-  gap: 4px;
-}
-
-.quick-nav button {
-  padding: 6px 10px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 4px;
-  font-size: 11px;
-  color: #6b7280;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.quick-nav button:hover {
-  background: #f9fafb;
-}
-
-.quick-nav button.active {
-  background: #4f46e5;
-  color: white;
-  border-color: #4f46e5;
-}
-
-.search-box {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  min-width: 180px;
-}
-
-.search-box i {
-  color: #9ca3af;
-  font-size: 12px;
-}
-
-.search-box input {
-  border: none;
-  background: none;
-  outline: none;
-  font-size: 13px;
-  width: 100%;
-  color: #1f2937;
-}
-
-.search-box input::placeholder {
-  color: #9ca3af;
-}
-
-/* Calendar Popup */
-.calendar-popup {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: 8px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-  padding: 16px;
-  z-index: 100;
-  width: 280px;
-}
-
-.popup-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.popup-nav-button {
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  color: #6b7280;
-}
-
-.popup-nav-button:hover {
-  background: #f3f4f6;
-}
-
-.popup-month-year {
-  font-weight: 600;
-  font-size: 14px;
-  color: #1f2937;
-}
-
-.popup-days-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
-}
-
-.day-name {
-  font-size: 11px;
-  font-weight: 600;
-  color: #9ca3af;
-  text-align: center;
-  padding: 4px;
-}
-
-.day-button {
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: none;
-  border-radius: 50%;
-  font-size: 12px;
-  cursor: pointer;
-  color: #374151;
-  transition: all 0.2s;
-}
-
-.day-button:hover {
-  background: #f3f4f6;
-}
-
-.day-button.selected-day {
-  background: #4f46e5;
-  color: white;
-}
-
-/* Main Layout */
-.main-layout {
-  display: grid;
-  grid-template-columns: 200px 1fr 280px;
-  gap: 12px;
-  flex: 1;
-  min-height: 0;
-  transition: grid-template-columns 0.3s ease;
-}
-
-.main-layout.filters-collapsed {
-  grid-template-columns: 44px 1fr 280px;
-}
-
-.main-layout.waiting-collapsed {
-  grid-template-columns: 200px 1fr 50px;
-}
-
-.main-layout.filters-collapsed.waiting-collapsed {
-  grid-template-columns: 44px 1fr 50px;
-}
-
-/* Filters Panel */
-.filters-panel {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  transition: width 0.3s ease;
-}
-
-.filters-panel .panel-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px;
-  border-bottom: 1px solid #e5e7eb;
-  font-weight: 600;
-  font-size: 13px;
-  color: #374151;
-}
-
-.filters-panel.collapsed .panel-header {
-  justify-content: center;
-  padding: 12px 8px;
-}
-
-.collapse-btn {
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f3f4f6;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  color: #6b7280;
-  transition: all 0.2s;
-}
-
-.collapse-btn:hover {
-  background: #e5e7eb;
-}
-
-.filters-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 12px;
-}
-
-.filter-section {
-  margin-bottom: 16px;
-}
-
-.filter-section:last-child {
-  margin-bottom: 0;
-}
-
-.filter-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #374151;
-  margin-bottom: 8px;
-}
-
-.filter-title i {
-  color: #6b7280;
-  font-size: 11px;
-}
-
-.filter-actions {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.filter-actions a {
-  font-size: 11px;
-  color: #4f46e5;
-  text-decoration: none;
-}
-
-.filter-actions a:hover {
-  text-decoration: underline;
-}
-
-.checkbox-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.checkbox-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  color: #374151;
-  cursor: pointer;
-  padding: 4px 0;
-}
-
-.checkbox-item input[type="checkbox"] {
-  width: 14px;
-  height: 14px;
-  accent-color: #4f46e5;
-  cursor: pointer;
-}
-
-.color-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.label-text {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.collapsed-icons {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 8px;
-}
-
-.icon-btn {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f3f4f6;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  color: #6b7280;
-  transition: all 0.2s;
-}
-
-.icon-btn:hover {
-  background: #e5e7eb;
-  color: #4f46e5;
-}
-
-/* Calendar Grid */
-.calendar-wrapper {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-  overflow: auto;
-  min-height: 0;
-}
-
-.calendar-grid {
-  display: grid;
-  min-width: max-content;
-}
-
-.grid-header-placeholder {
-  border-bottom: 1px solid #e5e7eb;
-  position: sticky;
-  top: 0;
-  background: white;
-  z-index: 2;
-}
-
-.grid-header {
-  padding: 10px 8px;
-  text-align: center;
-  font-weight: 600;
-  font-size: 12px;
-  color: #374151;
-  border-bottom: 1px solid #e5e7eb;
-  border-left: 1px solid #e5e7eb;
-  position: sticky;
-  top: 0;
-  background: white;
-  z-index: 2;
-  white-space: nowrap;
-}
-
-.time-label {
-  padding: 0 8px;
-  text-align: right;
-  font-size: 11px;
-  color: #9ca3af;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-end;
-  padding-top: 2px;
-}
-
-.time-slot {
-  height: 28px;
-  border-bottom: 1px solid #e5e7eb;
-  border-left: 1px solid #e5e7eb;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-.time-slot:hover {
-  background: #f0f9ff;
-}
-
-.time-slot.dashed-border {
-  border-bottom-style: dashed;
-  border-bottom-color: #e5e7eb;
-}
-
-/* Appointments */
-.appointment {
-  margin: 2px 4px;
-  padding: 4px 6px;
-  border-radius: 4px;
-  font-size: 11px;
-  cursor: grab;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.appointment:active {
-  cursor: grabbing;
-}
-
-.appointment.is-dragging {
-  opacity: 0.5;
-}
-
-.appt-content {
-  overflow: hidden;
-}
-
-.appt-title {
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.appt-subtitle {
-  font-size: 10px;
-  opacity: 0.8;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.appt-details {
-  font-size: 10px;
-  opacity: 0.7;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-top: 2px;
-}
-
-.appt-icons {
-  display: flex;
-  gap: 4px;
-  justify-content: flex-end;
-  margin-top: auto;
-}
-
-.appt-icons i {
-  font-size: 10px;
-}
-
-.text-red { color: #ef4444; }
-.text-green { color: #22c55e; }
-.text-blue { color: #3b82f6; }
-
-/* Appointment Type Colors */
-.type-emergency { background: #fecaca; color: #991b1b; border: 1px solid #fca5a5; }
-.type-private { background: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
-.type-private-light { background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
-.type-nhs { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-.type-nhs-light { background: #cffafe; color: #155e75; border: 1px solid #a5f3fc; }
-.type-exam { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
-.type-zoom { background: #86efac; color: #14532d; border: 1px solid #4ade80; }
-.type-blocked { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; opacity: 0.7; }
-.type-other { background: #e5e7eb; color: #374151; border: 1px solid #d1d5db; }
-
-/* Waiting Panel */
-.waiting-panel {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: width 0.3s ease;
-}
-
-.waiting-panel.collapsed {
-  width: 50px;
-}
-
-.collapsed-waiting {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 12px 8px;
-  gap: 12px;
-  height: 100%;
-}
-
-.expand-btn {
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f3f4f6;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  color: #6b7280;
-  transition: all 0.2s;
-}
-
-.expand-btn:hover {
-  background: #e5e7eb;
-}
-
-.waiting-badge {
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #eff6ff;
-  color: #1e40af;
-  border-radius: 50%;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.waiting-badge.has-alert {
-  background: #fef2f2;
-  color: #991b1b;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
-}
-
 .vertical-text {
   writing-mode: vertical-rl;
   text-orientation: mixed;
-  font-size: 11px;
-  font-weight: 500;
-  color: #6b7280;
-  letter-spacing: 1px;
 }
 
-.waiting-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+.scrollbar-thin::-webkit-scrollbar {
+  width: 5px;
 }
 
-/* Responsive */
-@media (max-width: 1200px) {
-  .main-layout {
-    grid-template-columns: 44px 1fr 50px;
-  }
-
-  .main-layout.filters-collapsed {
-    grid-template-columns: 44px 1fr 50px;
-  }
-
-  .main-layout.waiting-collapsed {
-    grid-template-columns: 44px 1fr 50px;
-  }
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
 }
 
-@media (max-width: 768px) {
-  .toolbar {
-    flex-direction: column;
-    align-items: stretch;
-  }
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
 
-  .toolbar-left,
-  .toolbar-center,
-  .toolbar-right {
-    justify-content: center;
-  }
-
-  .main-layout {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr auto;
-  }
-
-  .filters-panel,
-  .waiting-panel {
-    max-height: 200px;
-  }
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 </style>

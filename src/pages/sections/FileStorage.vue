@@ -1,92 +1,92 @@
 <template>
-  <div class="dashboard-container">
-    <main class="main">
-      <div class="header-section">
+  <div class="flex bg-white font-[Segoe_UI,Tahoma,Geneva,Verdana,sans-serif]">
+    <main class="flex-grow py-5 px-4 md:px-8 bg-white">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center flex-wrap mb-8 gap-4">
         <div>
-          <h1 class="page-title">Imaging & File Storage</h1>
-          <p class="subtitle">
-            Manage files for patient: <span class="patient-name">{{ patientName }}</span>
+          <h1 class="text-[28px] font-semibold text-[#303030] m-0 font-[Poppins]">Imaging & File Storage</h1>
+          <p class="text-primary text-base font-bold mt-1 font-[Poppins]">
+            Manage files for patient: <span class="font-semibold text-gray-900">{{ patientName }}</span>
           </p>
         </div>
-        <div class="header-buttons">
-          <button class="btn btn-blue">
-            <span class="material-symbols-outlined icon-small">upload</span>
+        <div class="flex gap-3">
+          <button class="px-4 py-2 rounded-md text-sm font-medium flex items-center cursor-pointer border-none bg-blue-600 text-white hover:bg-blue-700 transition-colors">
+            <span class="material-symbols-outlined text-xl mr-2">upload</span>
             Upload File
           </button>
-          <button class="btn btn-light">
-            <span class="material-symbols-outlined icon-small">create_new_folder</span>
+          <button class="px-4 py-2 rounded-md text-sm font-medium flex items-center cursor-pointer bg-white text-gray-900 border border-gray-300 hover:bg-gray-50 transition-colors">
+            <span class="material-symbols-outlined text-xl mr-2">create_new_folder</span>
             New Folder
           </button>
         </div>
       </div>
 
-      <div class="file-list-card">
-        <div class="table-header-container">
-          <div class="table-header-row">
-            <div class="table-header-cell col-name">Name</div>
-            <div class="table-header-cell col-type">Type</div>
-            <div class="table-header-cell col-date">Date Modified</div>
-            <div class="table-header-cell col-size">Size</div>
-            <div class="table-header-cell col-actions">Actions</div>
+      <div class="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm">
+        <div class="bg-gray-50 border-b border-gray-200">
+          <div class="grid grid-cols-[3.5fr_2fr_2fr_1.5fr_1.5fr] items-center py-3 px-4 gap-4 font-[Poppins] text-xs font-semibold text-gray-500 uppercase">
+            <div>Name</div>
+            <div>Type</div>
+            <div>Date Modified</div>
+            <div>Size</div>
+            <div>Actions</div>
           </div>
         </div>
-        <div class="table-rows-container">
-          <div v-for="file in files" :key="file.name" class="table-row-item">
-            <div class="table-cell-content col-name">
-              <span class="material-symbols-outlined icon-margin" :class="file.iconColor">
+        <div>
+          <div v-for="file in files" :key="file.name" class="grid grid-cols-[3.5fr_2fr_2fr_1.5fr_1.5fr] items-center py-3 px-4 gap-4 font-[Poppins] text-sm text-gray-900 border-b border-gray-200 last:border-b-0 hover:bg-gray-50 transition-colors group">
+            <div class="flex items-center whitespace-nowrap overflow-hidden text-ellipsis">
+              <span class="material-symbols-outlined mr-2" :class="getIconColor(file.iconColor)">
                 {{ file.icon }}
               </span>
-              <span class="file-name">{{ file.name }}</span>
+              <span class="font-medium text-gray-700">{{ file.name }}</span>
             </div>
-            <span class="table-cell-content col-type">{{ file.type }}</span>
-            <span class="table-cell-content col-date">{{ file.dateModified }}</span>
-            <span class="table-cell-content col-size">{{ file.size }}</span>
-            <div class="table-cell-content col-actions actions">
-              <button class="action-btn">
-                <span class="material-symbols-outlined icon-action">edit</span>
+            <span class="flex items-center whitespace-nowrap overflow-hidden text-ellipsis text-gray-500">{{ file.type }}</span>
+            <span class="flex items-center whitespace-nowrap overflow-hidden text-ellipsis text-gray-500">{{ file.dateModified }}</span>
+            <span class="flex items-center whitespace-nowrap overflow-hidden text-ellipsis text-gray-500">{{ file.size }}</span>
+            <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <button class="bg-transparent border-none cursor-pointer p-1 rounded-full inline-flex items-center justify-center hover:bg-gray-100 action-btn">
+                <span class="material-symbols-outlined text-lg text-gray-500">edit</span>
               </button>
-              <button v-if="file.type !== 'Folder'" class="action-btn action-draw">
-                <span class="material-symbols-outlined icon-action">draw</span>
+              <button v-if="file.type !== 'Folder'" class="bg-transparent border-none cursor-pointer p-1 rounded-full inline-flex items-center justify-center hover:bg-gray-100 action-draw">
+                <span class="material-symbols-outlined text-lg text-gray-500">draw</span>
               </button>
-              <button class="action-btn action-delete">
-                <span class="material-symbols-outlined icon-action">delete</span>
+              <button class="bg-transparent border-none cursor-pointer p-1 rounded-full inline-flex items-center justify-center hover:bg-gray-100 action-delete">
+                <span class="material-symbols-outlined text-lg text-gray-500">delete</span>
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="integrations-section">
-        <h3 class="integrations-title">System Integrations</h3>
-        <div class="integrations-grid">
-          <div class="integration-card">
-            <div class="icon-container-blue">
-              <span class="material-symbols-outlined icon-large">dns</span>
+      <div class="mt-10">
+        <h3 class="text-xl font-semibold mb-6 font-[Poppins]">System Integrations</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="flex items-start bg-white border border-gray-200 rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow">
+            <div class="p-3 rounded-lg flex-shrink-0 mr-4 bg-blue-100 text-blue-600">
+              <span class="material-symbols-outlined text-2xl">dns</span>
             </div>
-            <div class="integration-content">
-              <p class="integration-heading">PACS Integration</p>
-              <p class="integration-description">
+            <div>
+              <p class="text-base font-semibold m-0 text-gray-900 font-[Poppins]">PACS Integration</p>
+              <p class="text-sm text-gray-500 mt-1 mb-3">
                 Connect to your Picture Archiving and Communication System for seamless
                 data flow.
               </p>
-              <a href="#" class="link-btn link-blue">
+              <a href="#" class="text-sm font-semibold inline-flex items-center cursor-pointer font-[Poppins] text-blue-600 hover:text-blue-700 group/link">
                 Configure Now
-                <span class="material-symbols-outlined icon-arrow">arrow_forward</span>
+                <span class="material-symbols-outlined text-base ml-1 transition-transform group-hover/link:translate-x-1">arrow_forward</span>
               </a>
             </div>
           </div>
-          <div class="integration-card">
-            <div class="icon-container-green">
-              <span class="material-symbols-outlined icon-large">photo_camera</span>
+          <div class="flex items-start bg-white border border-gray-200 rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow">
+            <div class="p-3 rounded-lg flex-shrink-0 mr-4 bg-green-100 text-green-600">
+              <span class="material-symbols-outlined text-2xl">photo_camera</span>
             </div>
-            <div class="integration-content">
-              <p class="integration-heading">Auto-import from Imaging Hardware</p>
-              <p class="integration-description">
+            <div>
+              <p class="text-base font-semibold m-0 text-gray-900 font-[Poppins]">Auto-import from Imaging Hardware</p>
+              <p class="text-sm text-gray-500 mt-1 mb-3">
                 Automatically pull images directly from connected imaging devices.
               </p>
-              <a href="#" class="link-btn link-green">
+              <a href="#" class="text-sm font-semibold inline-flex items-center cursor-pointer font-[Poppins] text-green-600 hover:text-green-700 group/link">
                 Setup Device
-                <span class="material-symbols-outlined icon-arrow">arrow_forward</span>
+                <span class="material-symbols-outlined text-base ml-1 transition-transform group-hover/link:translate-x-1">arrow_forward</span>
               </a>
             </div>
           </div>
@@ -138,309 +138,29 @@ export default {
       ],
     };
   },
+  methods: {
+    getIconColor(color) {
+      const colors = {
+        'text-gray': 'text-gray-500',
+        'text-blue': 'text-blue-500',
+        'text-red': 'text-red-500',
+      };
+      return colors[color] || 'text-gray-500';
+    },
+  },
 };
 </script>
 
 <style scoped>
-.dashboard-container {
-  display: flex;
-  background: #ffffff;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.main {
-  flex-grow: 1;
-  padding: 20px 30px;
-  background: #fff;
-}
-
-/* Header Section */
-.header-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 2rem;
-}
-
-.page-title {
-  font-size: 28px;
-  font-weight: 600;
-  color: #303030;
-  margin: 0;
-  font-family: Poppins;
-}
-
-.subtitle {
-  color: #34d8d1;
-  font-size: 16px;
-  font-weight: bold;
-  margin-top: 0.25rem;
-  font-family: Poppins;
-}
-
-.patient-name {
-  font-weight: 600;
-  color: #111827;
-}
-
-.header-buttons {
-  display: flex;
-  gap: 0.75rem;
-}
-
-.btn {
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  border: none;
-  font-family: inherit;
-}
-
-.btn-blue {
-  background-color: #2563eb;
-  color: #fff;
-}
-
-.btn-blue:hover {
-  background-color: #1d4ed8;
-}
-
-.btn-light {
-  background-color: #fff;
-  color: #111827;
-  border: 1px solid #d1d5db;
-}
-
-.btn-light:hover {
-  background-color: #f9fafb;
-}
-
-.icon-small {
-  font-size: 1.25rem;
-  margin-right: 0.5rem;
-}
-
-/* File List */
-.file-list-card {
-  background-color: #fff;
-  border-radius: 0.5rem;
-  border: 1px solid #e5e7eb;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
-}
-
-.table-header-row,
-.table-row-item {
-  display: grid;
-  grid-template-columns: 3.5fr 2fr 2fr 1.5fr 1.5fr;
-  align-items: center;
-  padding: 0.75rem 1rem;
-  gap: 1rem;
-  font-family: Poppins;
-}
-
-.table-header-row {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #6b7280;
-  background-color: #f9fafb;
-  border-bottom: 1px solid #e5e7eb;
-  text-transform: uppercase;
-}
-
-.table-row-item {
-  font-size: 0.875rem;
-  color: #111827;
-  border-bottom: 1px solid #e5e7eb;
-  transition: background-color 0.2s;
-}
-
-.table-row-item:last-child {
-  border-bottom: none;
-}
-
-.table-row-item:hover {
-  background-color: #f9fafb;
-}
-
-.file-name {
-  font-weight: 500;
-  margin-left: 0.5rem;
-  color: #374151;
-}
-
-.table-cell-content {
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.col-type,
-.col-date {
-  color: #6b7280;
-}
-
-.col-size {
-  color: #6b7280;
-}
-
-.actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.25rem;
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-
-.table-row-item:hover .actions {
-  opacity: 1;
-}
-
-.action-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.25rem;
-  border-radius: 9999px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.action-btn:hover {
-  background-color: #f3f4f6;
-}
-
-.icon-action {
-  font-size: 1.125rem;
-  color: #6b7280;
-}
-
-.action-btn:hover .icon-action {
+.action-btn:hover .material-symbols-outlined {
   color: #2563eb;
 }
 
-.action-draw:hover .icon-action {
+.action-draw:hover .material-symbols-outlined {
   color: #16a34a;
 }
 
-.action-delete:hover .icon-action {
+.action-delete:hover .material-symbols-outlined {
   color: #ef4444;
-}
-
-/* Integrations Section */
-.integrations-section {
-  margin-top: 2.5rem;
-}
-
-.integrations-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  font-family: Poppins;
-}
-
-.integrations-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-}
-
-.integration-card {
-  display: flex;
-  align-items: flex-start;
-  background-color: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  padding: 1.25rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.2s;
-}
-
-.integration-card:hover {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
-}
-
-.icon-container-blue,
-.icon-container-green {
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  flex-shrink: 0;
-  margin-right: 1rem;
-}
-
-.icon-container-blue {
-  background-color: #dbeafe;
-  color: #2563eb;
-}
-
-.icon-container-green {
-  background-color: #dcfce7;
-  color: #16a34a;
-}
-
-.icon-large {
-  font-size: 1.5rem;
-}
-
-.integration-heading {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0;
-  color: #111827;
-  font-family: Poppins;
-}
-
-.integration-description {
-  font-size: 0.875rem;
-  color: #6b7280;
-  margin: 0.25rem 0 0.75rem;
-}
-
-.link-btn {
-  font-size: 0.875rem;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  cursor: pointer;
-  background: none;
-  border: none;
-  padding: 0;
-  color: inherit;
-  font-family: Poppins;
-  text-decoration: none;
-}
-
-.link-blue {
-  color: #2563eb;
-}
-
-.link-blue:hover {
-  color: #1d4ed8;
-}
-
-.link-green {
-  color: #16a34a;
-}
-
-.link-green:hover {
-  color: #15803d;
-}
-
-.icon-arrow {
-  margin-left: 0.25rem;
-  font-size: 1rem;
-  transition: transform 0.2s;
-}
-
-.link-btn:hover .icon-arrow {
-  transform: translateX(0.25rem);
 }
 </style>

@@ -1,104 +1,85 @@
 <template>
-  <div class="sidebar">
-    <div class="sidebar-scroll">
-      <div class="sidebar-logo">
-        <img src="/logo/logo.svg" alt="logo" />
+  <!-- Mobile Header Bar -->
+  <div class="md:hidden fixed top-0 left-0 right-0 h-16 bg-card flex items-center justify-between px-4 shadow-sm z-[1001]">
+    <img src="/logo/logo.svg" alt="logo" class="w-8" />
+    <button 
+      @click="toggleMobileMenu"
+      class="p-2 rounded-lg hover:bg-gray-200 transition-colors"
+    >
+      <i :class="mobileMenuOpen ? 'fas fa-times' : 'fas fa-bars'" class="text-xl text-gray-600"></i>
+    </button>
+  </div>
+
+  <!-- Mobile Slide-out Menu -->
+  <div 
+    v-if="mobileMenuOpen"
+    class="md:hidden fixed inset-0 bg-black/50 z-[1000]"
+    @click="closeMobileMenu"
+  ></div>
+  
+  <div 
+    :class="[
+      'md:hidden fixed top-16 right-0 w-72 h-[calc(100vh-64px)] bg-white shadow-xl z-[1001] transform transition-transform duration-300 overflow-y-auto',
+      mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+    ]"
+  >
+    <nav class="py-4">
+      <div
+        v-for="item in navItems"
+        :key="item.key"
+        :class="[
+          'flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors',
+          active === item.key ? 'bg-purple-accent text-white' : 'text-gray-600 hover:bg-gray-100'
+        ]"
+        @click="handleNavigate(item.key)"
+      >
+        <i :class="item.icon" class="text-lg w-6"></i>
+        <span class="text-sm font-medium">{{ item.label }}</span>
+      </div>
+      
+      <!-- Logout in mobile menu -->
+      <div class="border-t border-gray-200 mt-4 pt-4">
+        <div
+          class="flex items-center gap-3 px-4 py-3 cursor-pointer text-red-500 hover:bg-red-50 transition-colors"
+          @click="handleLogout"
+        >
+          <i class="fas fa-sign-out-alt text-lg w-6"></i>
+          <span class="text-sm font-medium">Logout</span>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Desktop Sidebar -->
+  <div class="hidden md:flex fixed top-0 left-0 w-[90px] h-screen bg-card flex-col shadow-[2px_0_8px_rgba(0,0,0,0.05)] z-[1000]">
+    <!-- Scrollable icons area -->
+    <div class="flex-1 flex flex-col items-center pt-8 overflow-y-auto scrollbar-hide">
+      <!-- Logo -->
+      <div class="mb-10">
+        <img src="/logo/logo.svg" alt="logo" class="w-9" />
       </div>
 
+      <!-- Navigation Icons -->
       <i
-        class="fas fa-table-columns"
-        :class="{ active: active === 'dashboard' }"
-        @click="$emit('navigate', 'dashboard')"
-        title="Dashboard"
-      ></i>
-      <i
-        class="fas fa-user-friends"
-        :class="{ active: active === 'patients' }"
-        @click="$emit('navigate', 'patients')"
-        title="Patient Records"
-      ></i>
-      <i
-        class="fas fa-calendar-alt"
-        :class="{ active: active === 'appointments' }"
-        @click="$emit('navigate', 'appointments')"
-        title="Appointments Calendar"
-      ></i>
-      <i
-        class="fas fa-chart-pie"
-        :class="{ active: active === 'chart' }"
-        @click="$emit('navigate', 'chart')"
-        title="Chart"
-      ></i>
-      <i
-        class="fas fa-book"
-        :class="{ active: active === 'notes' }"
-        @click="$emit('navigate', 'notes')"
-        title="Clinical Notes"
-      ></i>
-      <i
-        class="fas fa-credit-card"
-        :class="{ active: active === 'private-treatment-invoicing' }"
-        @click="$emit('navigate', 'private-treatment-invoicing')"
-        title="Private Treatment & Invoicing"
-      ></i>
-      <i
-        class="fas fa-receipt"
-        :class="{ active: active === 'claims' }"
-        @click="$emit('navigate', 'claims')"
-        title="NHS FP17 Claims (EDI Submission)"
-      ></i>
-      <i
-        class="fas fa-bullseye"
-        :class="{ active: active === 'uda' }"
-        @click="$emit('navigate', 'uda')"
-        title="UDA Management (Units of Dental Activity)"
-      ></i>
-      <i
-        class="fas fa-file-contract"
-        :class="{ active: active === 'pcm' }"
-        @click="$emit('navigate', 'pcm')"
-        title="Performer & Contract Management"
-      ></i>
-      <i
-        class="fas fa-vial"
-        :class="{ active: active === 'lab' }"
-        @click="$emit('navigate', 'lab')"
-        title="Lab & Referral Workflow"
-      ></i>
-      <i
-        class="fas fa-people-group"
-        :class="{ active: active === 'family' }"
-        @click="$emit('navigate', 'family')"
-        title="Family Management"
-      ></i>
-      <i
-        class="fas fa-camera"
-        :class="{ active: active === 'imaging' }"
-        @click="$emit('navigate', 'imaging')"
-        title="Imaging & X-Rays"
-      ></i>
-      <i
-        class="fas fa-folder-open"
-        :class="{ active: active === 'files' }"
-        @click="$emit('navigate', 'files')"
-        title="File Storage"
-      ></i>
-      <i
-        class="fas fa-user-md"
-        :class="{ active: active === 'staff' }"
-        @click="$emit('navigate', 'staff')"
-        title="Staff Management"
-      ></i>
-      <i
-        class="fas fa-boxes-stacked"
-        :class="{ active: active === 'reports' }"
-        @click="$emit('navigate', 'reports')"
-        title="Reports"
+        v-for="item in navItems"
+        :key="item.key"
+        :class="[
+          item.icon,
+          'text-lg cursor-pointer my-2.5 text-gray-500 p-3 w-11 h-11 flex items-center justify-center rounded-xl transition-all duration-300 hover:bg-gray-200',
+          { 'bg-purple-accent !text-white': active === item.key }
+        ]"
+        @click="$emit('navigate', item.key)"
+        :title="item.label"
       ></i>
     </div>
 
-    <div class="sidebar-footer">
-      <i class="fas fa-sign-out-alt" title="Logout" @click="$emit('logout')"></i>
+    <!-- Footer with logout -->
+    <div class="flex flex-col items-center gap-8 py-5">
+      <i 
+        class="fas fa-sign-out-alt text-lg cursor-pointer my-2.5 text-gray-500 p-3 w-11 h-11 flex items-center justify-center rounded-xl transition-all duration-300 hover:bg-gray-200" 
+        title="Logout" 
+        @click="$emit('logout')"
+      ></i>
     </div>
   </div>
 </template>
@@ -107,73 +88,54 @@
 export default {
   props: ["active"],
   emits: ["navigate", "logout"],
+  data() {
+    return {
+      mobileMenuOpen: false,
+      navItems: [
+        { key: 'dashboard', icon: 'fas fa-table-columns', label: 'Dashboard' },
+        { key: 'patients', icon: 'fas fa-user-friends', label: 'Patient Records' },
+        { key: 'appointments', icon: 'fas fa-calendar-alt', label: 'Appointments' },
+        { key: 'chart', icon: 'fas fa-chart-pie', label: 'Chart' },
+        { key: 'notes', icon: 'fas fa-book', label: 'Clinical Notes' },
+        { key: 'private-treatment-invoicing', icon: 'fas fa-credit-card', label: 'Private Treatment & Invoicing' },
+        { key: 'claims', icon: 'fas fa-receipt', label: 'NHS FP17 Claims' },
+        { key: 'uda', icon: 'fas fa-bullseye', label: 'UDA Management' },
+        { key: 'pcm', icon: 'fas fa-file-contract', label: 'Performer & Contract' },
+        { key: 'lab', icon: 'fas fa-vial', label: 'Lab & Referral' },
+        { key: 'family', icon: 'fas fa-people-group', label: 'Family Management' },
+        { key: 'imaging', icon: 'fas fa-camera', label: 'Imaging & X-Rays' },
+        { key: 'files', icon: 'fas fa-folder-open', label: 'File Storage' },
+        { key: 'staff', icon: 'fas fa-user-md', label: 'Staff Management' },
+        { key: 'reports', icon: 'fas fa-boxes-stacked', label: 'Reports' },
+      ]
+    };
+  },
+  methods: {
+    toggleMobileMenu() {
+      this.mobileMenuOpen = !this.mobileMenuOpen;
+    },
+    closeMobileMenu() {
+      this.mobileMenuOpen = false;
+    },
+    handleNavigate(key) {
+      this.$emit('navigate', key);
+      this.closeMobileMenu();
+    },
+    handleLogout() {
+      this.$emit('logout');
+      this.closeMobileMenu();
+    }
+  }
 };
 </script>
 
 <style scoped>
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 90px;
-  height: 100vh;
-  background: #f3f5f7;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
-  z-index: 1000;
-}
-
-/* Scrollable but hidden scrollbar */
-.sidebar-scroll {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 30px;
-  overflow-y: auto;
-
-  /* Hide scrollbar in Firefox */
+/* Hide scrollbar */
+.scrollbar-hide {
   scrollbar-width: none;
-  /* Hide scrollbar in IE/Edge */
   -ms-overflow-style: none;
 }
-
-/* Hide scrollbar in Chrome/Safari/Edge */
-.sidebar-scroll::-webkit-scrollbar {
+.scrollbar-hide::-webkit-scrollbar {
   display: none;
-}
-
-.sidebar-logo img {
-  width: 36px;
-  margin-bottom: 40px;
-}
-
-.sidebar i {
-  font-size: 18px;
-  cursor: pointer;
-  margin: 10px 0;
-  color: #6a6969;
-  padding: 12px;
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-}
-
-.sidebar i.active {
-  background-color: #4b3c97;
-  color: #fff;
-}
-
-.sidebar-footer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 30px;
-  padding: 20px 0;
 }
 </style>

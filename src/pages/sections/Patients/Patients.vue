@@ -1,228 +1,233 @@
 <template>
   <div id="app">
     <!-- Patient Form Modal -->
-    <div v-if="showModal" class="modal-overlay">
-      <div class="modal">
-        <header class="modal-header">
-          <h3>{{ isEditing ? "Edit Patient" : "Add New Patient" }}</h3>
-          <button @click="closeModal" class="close-button">×</button>
+    <div v-if="showModal" class="fixed inset-0 bg-black/50 flex justify-center items-center z-[1000] p-4">
+      <div class="bg-white rounded-xl shadow-lg w-full md:w-4/5 max-w-[900px] max-h-[90vh] flex flex-col">
+        <!-- Modal Header -->
+        <header class="flex justify-between items-center px-6 py-5 border-b border-gray-200">
+          <h3 class="m-0 text-xl font-semibold text-gray-800">{{ isEditing ? "Edit Patient" : "Add New Patient" }}</h3>
+          <button @click="closeModal" class="bg-transparent border-none text-2xl cursor-pointer text-gray-500 hover:text-gray-700">×</button>
         </header>
-        <div class="modal-body">
+        
+        <!-- Modal Body -->
+        <div class="p-6 overflow-y-auto flex-grow">
           <form @submit.prevent="submitForm">
             <!-- Patient Details Section -->
-            <div class="form-section">
-              <div class="form-grid">
-                <div class="form-group">
-                  <label>ID</label>
-                  <input type="text" v-model="form.id" disabled />
+            <div class="mb-5">
+              <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">ID</label>
+                  <input type="text" v-model="form.id" disabled class="px-2.5 py-2 border border-gray-300 rounded-md text-sm bg-gray-100" />
                 </div>
-                <div class="form-group">
-                  <label>Title</label>
-                  <select v-model="form.title">
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Title</label>
+                  <select v-model="form.title" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm">
                     <option>Mr</option>
                     <option>Ms</option>
                     <option>Mrs</option>
                     <option>Dr</option>
                   </select>
                 </div>
-                <div class="form-group">
-                  <label>First name</label>
-                  <input type="text" v-model="form.firstName" required />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">First name</label>
+                  <input type="text" v-model="form.firstName" required class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Middle name</label>
-                  <input type="text" v-model="form.middleName" />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Middle name</label>
+                  <input type="text" v-model="form.middleName" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Last name</label>
-                  <input type="text" v-model="form.lastName" required />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Last name</label>
+                  <input type="text" v-model="form.lastName" required class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Preferred name</label>
-                  <input type="text" v-model="form.preferredName" />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Preferred name</label>
+                  <input type="text" v-model="form.preferredName" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Gender</label>
-                  <select v-model="form.gender">
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Gender</label>
+                  <select v-model="form.gender" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm">
                     <option>Male</option>
                     <option>Female</option>
                     <option>Other</option>
                   </select>
                 </div>
-                <div class="form-group">
-                  <label>Date of birth</label>
-                  <input type="date" v-model="form.dob" required />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Date of birth</label>
+                  <input type="date" v-model="form.dob" required class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>NI number</label>
-                  <input type="text" v-model="form.niNumber" />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">NI number</label>
+                  <input type="text" v-model="form.niNumber" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>NHS number</label>
-                  <input type="text" v-model="form.nhsNumber" />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">NHS number</label>
+                  <input type="text" v-model="form.nhsNumber" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Insurance number</label>
-                  <input type="text" v-model="form.insuranceNumber" />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Insurance number</label>
+                  <input type="text" v-model="form.insuranceNumber" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Legacy ID</label>
-                  <input type="text" v-model="form.legacyId" />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Legacy ID</label>
+                  <input type="text" v-model="form.legacyId" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Ethnicity</label>
-                  <select v-model="form.ethnicity">
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Ethnicity</label>
+                  <select v-model="form.ethnicity" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm">
                     <option>British</option>
                     <option>Irish</option>
                   </select>
                 </div>
-                <div class="form-group">
-                  <label>GP</label>
-                  <input type="text" v-model="form.gp" />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">GP</label>
+                  <input type="text" v-model="form.gp" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
               </div>
             </div>
 
             <!-- Contact Details Section -->
-            <div class="form-section">
-              <h4>Contact Details</h4>
-              <div class="form-grid">
-                <div class="form-group">
-                  <label>Address line 1</label>
-                  <input type="text" v-model="form.address1" required />
+            <div class="mb-5">
+              <h4 class="text-base font-semibold text-gray-700 mb-3 border-b border-gray-200 pb-2">Contact Details</h4>
+              <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Address line 1</label>
+                  <input type="text" v-model="form.address1" required class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Address line 2</label>
-                  <input type="text" v-model="form.address2" />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Address line 2</label>
+                  <input type="text" v-model="form.address2" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Town</label>
-                  <input type="text" v-model="form.town" required />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Town</label>
+                  <input type="text" v-model="form.town" required class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>County</label>
-                  <input type="text" v-model="form.county" required />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">County</label>
+                  <input type="text" v-model="form.county" required class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Postcode</label>
-                  <input type="text" v-model="form.postcode" required />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Postcode</label>
+                  <input type="text" v-model="form.postcode" required class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Home phone</label>
-                  <input type="tel" v-model="form.homePhone" />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Home phone</label>
+                  <input type="tel" v-model="form.homePhone" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Work phone</label>
-                  <input type="tel" v-model="form.workPhone" />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Work phone</label>
+                  <input type="tel" v-model="form.workPhone" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Mobile phone</label>
-                  <input type="tel" v-model="form.mobilePhone" required />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Mobile phone</label>
+                  <input type="tel" v-model="form.mobilePhone" required class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Preferred phone</label>
-                  <select v-model="form.preferredPhone">
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Preferred phone</label>
+                  <select v-model="form.preferredPhone" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm">
                     <option>Home</option>
                     <option>Work</option>
                     <option>Mobile</option>
                   </select>
                 </div>
-                <div class="form-group">
-                  <label>Email</label>
-                  <input type="email" v-model="form.email" />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Email</label>
+                  <input type="email" v-model="form.email" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Doctor</label>
-                  <input type="text" v-model="form.doctor" />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Doctor</label>
+                  <input type="text" v-model="form.doctor" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Occupation</label>
-                  <input type="text" v-model="form.occupation" />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Occupation</label>
+                  <input type="text" v-model="form.occupation" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
               </div>
             </div>
 
             <!-- Practice Details Section -->
-            <div class="form-section">
-              <h4>Practice Details</h4>
-              <div class="form-grid">
-                <div class="form-group">
-                  <label>Location</label>
-                  <input type="text" v-model="form.location" />
+            <div class="mb-5">
+              <h4 class="text-base font-semibold text-gray-700 mb-3 border-b border-gray-200 pb-2">Practice Details</h4>
+              <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Location</label>
+                  <input type="text" v-model="form.location" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Payment plan</label>
-                  <select v-model="form.paymentPlan">
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Payment plan</label>
+                  <select v-model="form.paymentPlan" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm">
                     <option>Private</option>
                   </select>
                 </div>
-                <div class="form-group">
-                  <label>Account</label>
-                  <input type="text" v-model="form.account" />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Account</label>
+                  <input type="text" v-model="form.account" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Dentist</label>
-                  <input type="text" v-model="form.dentist" />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Dentist</label>
+                  <input type="text" v-model="form.dentist" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Hygienist</label>
-                  <input type="text" v-model="form.hygienist" />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Hygienist</label>
+                  <input type="text" v-model="form.hygienist" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Receive email</label>
-                  <select v-model="form.receiveEmail">
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Receive email</label>
+                  <select v-model="form.receiveEmail" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm">
                     <option>Yes</option>
                     <option>No</option>
                   </select>
                 </div>
-                <div class="form-group">
-                  <label>Receive SMS</label>
-                  <select v-model="form.receiveSms">
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Receive SMS</label>
+                  <select v-model="form.receiveSms" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm">
                     <option>Yes</option>
                     <option>No</option>
                   </select>
                 </div>
-                <div class="form-group">
-                  <label>Marketing Consent</label>
-                  <select v-model="form.marketingConsent">
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Marketing Consent</label>
+                  <select v-model="form.marketingConsent" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm">
                     <option>Yes</option>
                     <option>No</option>
                   </select>
                 </div>
-                <div class="form-group">
-                  <label>Dentist recall interval</label>
-                  <input type="text" v-model="form.dentistRecallInterval" />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Dentist recall interval</label>
+                  <input type="text" v-model="form.dentistRecallInterval" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Next dentist recall</label>
-                  <input type="date" v-model="form.nextDentistRecall" />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Next dentist recall</label>
+                  <input type="date" v-model="form.nextDentistRecall" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Hygienist recall interval</label>
-                  <input type="text" v-model="form.hygienistRecallInterval" />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Hygienist recall interval</label>
+                  <input type="text" v-model="form.hygienistRecallInterval" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Next hygienist recall</label>
-                  <input type="date" v-model="form.nextHygienistRecall" />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Next hygienist recall</label>
+                  <input type="date" v-model="form.nextHygienistRecall" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
-                <div class="form-group">
-                  <label>Recall method</label>
-                  <select v-model="form.recallMethod">
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Recall method</label>
+                  <select v-model="form.recallMethod" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm">
                     <option>SMS</option>
                     <option>Email</option>
                     <option>Phone</option>
                   </select>
                 </div>
-                <div class="form-group">
-                  <label>Acquisition source</label>
-                  <input type="text" v-model="form.acquisitionSource" />
+                <div class="flex flex-col">
+                  <label class="text-xs font-medium text-gray-600 mb-1">Acquisition source</label>
+                  <input type="text" v-model="form.acquisitionSource" class="px-2.5 py-2 border border-gray-300 rounded-md text-sm" />
                 </div>
               </div>
             </div>
           </form>
         </div>
-        <footer class="modal-footer">
-          <button class="save-button" @click="submitForm">
+        
+        <!-- Modal Footer -->
+        <footer class="px-6 py-4 border-t border-gray-200 flex justify-end">
+          <button class="bg-revenue text-white py-2.5 px-5 border-none rounded-lg cursor-pointer font-medium hover:bg-blue-600 transition-colors" @click="submitForm">
             {{ isEditing ? "Save Changes" : "Save Patient" }}
           </button>
         </footer>
@@ -230,43 +235,55 @@
     </div>
 
     <!-- Main Content for the Page -->
-    <main class="main-content">
-      <div class="content-wrapper">
+    <main class="p-3 md:p-5 bg-card font-[Poppins]">
+      <div class="flex flex-col lg:flex-row gap-4 md:gap-5 min-h-[calc(100vh-100px)]">
         <!-- Patient List Panel -->
-        <div class="patient-list-panel">
-          <div class="panel-header">
-            <h2 class="panel-title">All Patients</h2>
-            <button class="add-button" @click="openModal(false)">
-              <span class="material-icons">add</span>
-              Add New Patient
+        <div class="w-full lg:w-[350px] lg:flex-shrink-0 bg-white rounded-xl shadow-sm p-4 md:p-5 flex flex-col">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+            <h2 class="text-lg md:text-xl font-semibold text-gray-800 m-0">All Patients</h2>
+            <button 
+              @click="openModal(false)"
+              class="flex items-center gap-2 bg-revenue text-white py-2 md:py-2.5 px-3 md:px-4 border-none rounded-lg cursor-pointer font-medium hover:bg-blue-600 transition-colors text-sm md:text-base"
+            >
+              <span class="material-icons text-base md:text-lg">add</span>
+              <span class="hidden sm:inline">Add New Patient</span>
+              <span class="sm:hidden">Add</span>
             </button>
           </div>
-          <div class="patient-list">
+          
+          <!-- Patient List -->
+          <div class="flex-grow overflow-y-auto">
             <div
               v-for="patient in paginatedPatients"
               :key="patient.id"
               :class="[
-                'patient-list-item',
-                { active: selectedPatient && selectedPatient.id === patient.id },
+                'flex items-center gap-4 p-2.5 rounded-lg cursor-pointer transition-colors',
+                selectedPatient && selectedPatient.id === patient.id ? 'bg-gray-100' : 'hover:bg-gray-50'
               ]"
               @click="selectPatient(patient)"
             >
-              <img :src="patient.image" :alt="patient.name" class="patient-avatar" />
+              <img :src="patient.image" :alt="patient.name" class="w-10 h-10 rounded-full object-cover" />
               <div>
-                <p class="patient-name">{{ patient.name }}</p>
-                <p class="patient-last-visit">{{ patient.lastVisit }}</p>
+                <p class="font-semibold mb-0.5 text-sm text-gray-800">{{ patient.name }}</p>
+                <p class="text-xs text-gray-500">{{ patient.lastVisit }}</p>
               </div>
             </div>
           </div>
-          <div class="pagination">
-            <button @click="prevPage" :disabled="currentPage === 1" class="page-button">
+          
+          <!-- Pagination -->
+          <div class="flex justify-between items-center mt-4">
+            <button 
+              @click="prevPage" 
+              :disabled="currentPage === 1" 
+              class="bg-gray-100 border-none py-2 px-3 rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-200 transition-colors"
+            >
               Previous
             </button>
-            <span class="page-info">Page {{ currentPage }} of {{ totalPages }}</span>
+            <span class="text-sm text-gray-600">Page {{ currentPage }} of {{ totalPages }}</span>
             <button
               @click="nextPage"
               :disabled="currentPage === totalPages"
-              class="page-button"
+              class="bg-gray-100 border-none py-2 px-3 rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-200 transition-colors"
             >
               Next
             </button>
@@ -274,45 +291,52 @@
         </div>
 
         <!-- Patient Details Panel -->
-        <div class="patient-details-panel">
+        <div class="flex-grow bg-white rounded-xl shadow-sm p-4 md:p-5 flex flex-col">
           <div v-if="selectedPatient">
-            <div class="details-header">
-              <div class="flex-center">
+            <!-- Details Header -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-5 border-b border-gray-200">
+              <div class="flex items-center gap-3 md:gap-4">
                 <img
                   :src="selectedPatient.image"
                   :alt="selectedPatient.name"
-                  class="details-avatar"
+                  class="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover"
                 />
                 <div>
-                  <h2 class="details-name">{{ selectedPatient.name }}</h2>
-                  <p class="details-id">ID: {{ selectedPatient.id }}</p>
-                  <div class="vip-status">
-                    <span class="material-icons">star</span>
-                    <span class="vip-text">VIP Patient</span>
+                  <h2 class="text-xl md:text-2xl font-semibold text-gray-800">{{ selectedPatient.name }}</h2>
+                  <p class="text-sm text-gray-500">ID: {{ selectedPatient.id }}</p>
+                  <div class="flex items-center gap-1 text-yellow-500 text-sm">
+                    <span class="material-icons text-base">star</span>
+                    <span class="font-semibold">VIP Patient</span>
                   </div>
                 </div>
               </div>
-              <div class="action-buttons">
-                <button class="action-button" @click="openModal(true)">
+              <div class="flex gap-2">
+                <button @click="openModal(true)" class="bg-gray-200 border-none p-2 rounded-full cursor-pointer hover:bg-gray-300 transition-colors">
                   <span class="material-icons">edit</span>
                 </button>
-                <button class="action-button">
+                <button class="bg-gray-200 border-none p-2 rounded-full cursor-pointer hover:bg-gray-300 transition-colors">
                   <span class="material-icons">print</span>
                 </button>
-                <button class="action-button delete-button">
+                <button class="bg-gray-200 border-none p-2 rounded-full cursor-pointer hover:bg-gray-300 transition-colors text-red-500">
                   <span class="material-icons">delete</span>
                 </button>
               </div>
             </div>
 
             <!-- Tabbed Details Content -->
-            <div class="details-body">
-              <div class="tabs-container">
-                <nav class="tabs-nav">
+            <div class="flex-grow pt-5 flex flex-col">
+              <!-- Tabs Navigation -->
+              <div class="mb-4 -mx-4 md:mx-0">
+                <nav class="flex border-b-2 border-gray-200 mb-5 overflow-x-auto px-4 md:px-0">
                   <a
                     v-for="tab in tabs"
                     :key="tab"
-                    :class="['tab-link', { 'tab-active': activeTab === tab }]"
+                    :class="[
+                      'py-2.5 px-3 md:px-4 no-underline font-medium transition-all cursor-pointer whitespace-nowrap text-sm md:text-base',
+                      activeTab === tab 
+                        ? 'text-purple-accent border-b-2 border-purple-accent -mb-0.5' 
+                        : 'text-gray-500 hover:text-gray-700'
+                    ]"
                     @click="activeTab = tab"
                   >
                     {{ tab }}
@@ -321,35 +345,36 @@
               </div>
 
               <!-- Tab Content -->
-              <div class="tab-content">
-                <div v-if="activeTab === 'Patient Info'" class="grid-content">
-                  <div class="info-item">
-                    <h4 class="info-label">Full Name</h4>
-                    <p class="info-text">{{ selectedPatient.fullName }}</p>
+              <div class="flex-grow">
+                <!-- Patient Info Tab -->
+                <div v-if="activeTab === 'Patient Info'" class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
+                  <div class="flex flex-col">
+                    <h4 class="text-sm font-medium text-gray-500 mb-1">Full Name</h4>
+                    <p class="text-base font-semibold text-gray-800">{{ selectedPatient.fullName }}</p>
                   </div>
-                  <div class="info-item">
-                    <h4 class="info-label">Date of Birth</h4>
-                    <p class="info-text">{{ selectedPatient.dob }}</p>
+                  <div class="flex flex-col">
+                    <h4 class="text-sm font-medium text-gray-500 mb-1">Date of Birth</h4>
+                    <p class="text-base font-semibold text-gray-800">{{ selectedPatient.dob }}</p>
                   </div>
-                  <div class="info-item">
-                    <h4 class="info-label">Email Address</h4>
-                    <p class="info-text">{{ selectedPatient.email }}</p>
+                  <div class="flex flex-col">
+                    <h4 class="text-sm font-medium text-gray-500 mb-1">Email Address</h4>
+                    <p class="text-base font-semibold text-gray-800">{{ selectedPatient.email }}</p>
                   </div>
-                  <div class="info-item">
-                    <h4 class="info-label">Phone Number</h4>
-                    <p class="info-text">{{ selectedPatient.phone }}</p>
+                  <div class="flex flex-col">
+                    <h4 class="text-sm font-medium text-gray-500 mb-1">Phone Number</h4>
+                    <p class="text-base font-semibold text-gray-800">{{ selectedPatient.phone }}</p>
                   </div>
-                  <div class="info-item-full">
-                    <h4 class="info-label">Address</h4>
-                    <p class="info-text">{{ selectedPatient.address }}</p>
+                  <div class="flex flex-col sm:col-span-2">
+                    <h4 class="text-sm font-medium text-gray-500 mb-1">Address</h4>
+                    <p class="text-base font-semibold text-gray-800">{{ selectedPatient.address }}</p>
                   </div>
-                  <div class="info-item-full">
-                    <h4 class="info-label">Primary Dental Concerns</h4>
-                    <div class="concern-tags">
+                  <div class="flex flex-col sm:col-span-2">
+                    <h4 class="text-sm font-medium text-gray-500 mb-1">Primary Dental Concerns</h4>
+                    <div class="flex gap-2">
                       <span
                         v-for="concern in selectedPatient.concerns"
                         :key="concern"
-                        class="concern-tag"
+                        class="bg-blue-100 text-blue-500 py-1 px-2.5 rounded-xl text-xs"
                       >
                         {{ concern }}
                       </span>
@@ -357,26 +382,26 @@
                   </div>
                 </div>
 
-                <div
-                  v-else-if="activeTab === 'Appointments'"
-                  class="tab-scroll-container"
-                >
+                <!-- Appointments Tab -->
+                <div v-else-if="activeTab === 'Appointments'" class="flex-grow overflow-y-auto">
                   <div
                     v-for="appointment in selectedPatient.appointments"
                     :key="appointment.id"
-                    class="appointment-item"
+                    class="flex items-center gap-4 p-3 border-b border-gray-200"
                   >
-                    <div class="appointment-date">{{ appointment.date }}</div>
-                    <div class="appointment-details">
-                      <p class="appointment-title">{{ appointment.title }}</p>
-                      <p class="appointment-time">{{ appointment.time }}</p>
+                    <div class="text-sm font-semibold text-purple-accent">{{ appointment.date }}</div>
+                    <div class="flex-grow">
+                      <p class="font-semibold mb-0.5">{{ appointment.title }}</p>
+                      <p class="text-sm text-gray-500">{{ appointment.time }}</p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div v-else class="empty-state">
+          
+          <!-- Empty State -->
+          <div v-else class="text-center py-12 text-gray-500">
             <p>Select a patient to view details.</p>
           </div>
         </div>
@@ -641,393 +666,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-/* Main layout */
-.main-content {
-  padding: 20px 30px;
-  background-color: #f3f5f7;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-.page-title {
-  font-size: 28px;
-  font-weight: 600;
-  color: #303030;
-}
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.search-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-.search-input {
-  padding: 10px 10px 10px 40px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 14px;
-}
-.search-icon {
-  position: absolute;
-  left: 10px;
-  color: #888;
-}
-.add-button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background-color: #34a7d8;
-  color: #fff;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.3s;
-}
-.add-button:hover {
-  background-color: #3491d8;
-}
-.content-wrapper {
-  display: flex;
-  gap: 20px;
-  min-height: calc(100vh - 100px);
-}
-.patient-list-panel {
-  flex-basis: 350px;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-}
-.panel-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-}
-.panel-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: #333;
-  margin: 0;
-}
-.patient-list {
-  flex-grow: 1;
-  overflow-y: auto;
-}
-.patient-list-item {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-.patient-list-item:hover,
-.patient-list-item.active {
-  background-color: #f0f0f0;
-}
-.patient-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-.patient-name {
-  font-weight: 600;
-  margin-bottom: 2px;
-  font-size: 14px;
-}
-.patient-last-visit {
-  font-size: 12px;
-  color: #888;
-}
-.pagination {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 15px;
-}
-.page-button {
-  background-color: #f0f0f0;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-.page-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-.patient-details-panel {
-  flex-grow: 1;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-}
-.empty-state {
-  text-align: center;
-  padding: 50px;
-  color: #888;
-}
-.details-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #eee;
-}
-.flex-center {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-.details-avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-.details-name {
-  font-size: 24px;
-  font-weight: 600;
-  color: #333;
-}
-.details-id {
-  font-size: 14px;
-  color: #888;
-}
-.vip-status {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  color: gold;
-  font-size: 14px;
-}
-.vip-text {
-  font-weight: 600;
-}
-.action-buttons {
-  display: flex;
-  gap: 10px;
-}
-.action-button {
-  background-color: #eee;
-  border: none;
-  padding: 8px;
-  border-radius: 50%;
-  cursor: pointer;
-}
-.action-button:hover {
-  background-color: #ddd;
-}
-.delete-button {
-  color: #ef4444;
-}
-.details-body {
-  flex-grow: 1;
-  padding-top: 20px;
-  display: flex;
-  flex-direction: column;
-}
-.tabs-container {
-  margin-bottom: 15px;
-}
-.tabs-nav {
-  display: flex;
-  border-bottom: 2px solid #eee;
-  margin-bottom: 20px;
-}
-.tab-link {
-  padding: 10px 15px;
-  text-decoration: none;
-  color: #888;
-  font-weight: 500;
-  transition: all 0.2s;
-}
-.tab-active {
-  color: #4b3c97;
-  border-bottom: 2px solid #4b3c97;
-}
-.grid-content {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
-.info-item {
-  display: flex;
-  flex-direction: column;
-}
-.info-label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #888;
-  margin-bottom: 4px;
-}
-.info-text {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-}
-.info-item-full {
-  grid-column: 1 / -1;
-}
-.concern-tags {
-  display: flex;
-  gap: 8px;
-}
-.concern-tag {
-  background-color: #e6f7ff;
-  color: #1890ff;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-}
-.tab-scroll-container {
-  flex-grow: 1;
-  overflow-y: auto;
-}
-.appointment-item {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 12px;
-  border-bottom: 1px solid #eee;
-}
-.appointment-date {
-  font-size: 14px;
-  font-weight: 600;
-  color: #4b3c97;
-}
-.appointment-details {
-  flex-grow: 1;
-}
-.appointment-title {
-  font-weight: 600;
-  margin-bottom: 2px;
-}
-.appointment-time {
-  font-size: 14px;
-  color: #888;
-}
-
-/* Modal styles */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-.modal {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  width: 80%;
-  max-width: 900px;
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
-}
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 24px;
-  border-bottom: 1px solid #e0e0e0;
-}
-.modal-header h3 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 600;
-  color: #333;
-}
-.close-button {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #888;
-}
-.modal-body {
-  padding: 24px;
-  overflow-y: auto;
-  flex-grow: 1;
-}
-.form-section {
-  margin-bottom: 20px;
-}
-.form-section h4 {
-  font-size: 16px;
-  font-weight: 600;
-  color: #374151;
-  margin-bottom: 12px;
-  border-bottom: 1px solid #e5e7eb;
-  padding-bottom: 8px;
-}
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
-}
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-.form-group label {
-  font-size: 12px;
-  font-weight: 500;
-  color: #4b5563;
-  margin-bottom: 4px;
-}
-.form-group input,
-.form-group select {
-  padding: 8px 10px;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  font-size: 14px;
-}
-.modal-footer {
-  padding: 16px 24px;
-  border-top: 1px solid #e0e0e0;
-  display: flex;
-  justify-content: flex-end;
-}
-.save-button {
-  background-color: #34a7d8;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-}
-.save-button:hover {
-  background-color: #3491d8;
-}
-</style>

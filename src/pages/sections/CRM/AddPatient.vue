@@ -1,39 +1,39 @@
 <template>
-  <div class="page-container">
-    <h2 class="page-title">Add Patient</h2>
-    <p class="page-subtitle">Add a new patient to your clinic's records.</p>
+  <div class="max-w-[700px] mx-auto my-10 p-8 bg-white rounded-xl shadow-lg">
+    <h2 class="text-2xl font-bold mb-1">Add Patient</h2>
+    <p class="text-gray-500 text-sm mb-6">Add a new patient to your clinic's records.</p>
 
     <form @submit.prevent="submitForm">
-      <div class="form-row">
-        <div class="form-group">
-          <label>First Name</label>
-          <input v-model="form.firstName" type="text" required />
+      <div class="flex flex-col sm:flex-row gap-5 mb-4">
+        <div class="flex-1 flex flex-col">
+          <label class="text-sm font-medium mb-1.5">First Name</label>
+          <input v-model="form.firstName" type="text" required class="p-2.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20" />
         </div>
-        <div class="form-group">
-          <label>Last Name</label>
-          <input v-model="form.lastName" type="text" required />
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label>Email</label>
-          <input v-model="form.email" type="email" required />
-        </div>
-        <div class="form-group">
-          <label>Phone</label>
-          <input v-model="form.phone" type="text" />
+        <div class="flex-1 flex flex-col">
+          <label class="text-sm font-medium mb-1.5">Last Name</label>
+          <input v-model="form.lastName" type="text" required class="p-2.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20" />
         </div>
       </div>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label>Date of Birth</label>
-          <input v-model="form.dob" type="date" />
+      <div class="flex flex-col sm:flex-row gap-5 mb-4">
+        <div class="flex-1 flex flex-col">
+          <label class="text-sm font-medium mb-1.5">Email</label>
+          <input v-model="form.email" type="email" required class="p-2.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20" />
         </div>
-        <div class="form-group">
-          <label>Gender</label>
-          <select v-model="form.gender">
+        <div class="flex-1 flex flex-col">
+          <label class="text-sm font-medium mb-1.5">Phone</label>
+          <input v-model="form.phone" type="text" class="p-2.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20" />
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-5 mb-4">
+        <div class="flex-1 flex flex-col">
+          <label class="text-sm font-medium mb-1.5">Date of Birth</label>
+          <input v-model="form.dob" type="date" class="p-2.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20" />
+        </div>
+        <div class="flex-1 flex flex-col">
+          <label class="text-sm font-medium mb-1.5">Gender</label>
+          <select v-model="form.gender" class="p-2.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20">
             <option>Male</option>
             <option>Female</option>
             <option>Other</option>
@@ -41,38 +41,39 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <label>Skin Type</label>
-        <input v-model="form.skinType" placeholder="e.g., Oily, Dry, Combination" />
+      <div class="flex flex-col mb-4">
+        <label class="text-sm font-medium mb-1.5">Skin Type</label>
+        <input v-model="form.skinType" placeholder="e.g., Oily, Dry, Combination" class="p-2.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20" />
       </div>
 
-      <div class="form-group">
-        <label>Concerns</label>
+      <div class="flex flex-col mb-4">
+        <label class="text-sm font-medium mb-1.5">Concerns</label>
         <textarea
           v-model="form.concerns"
           placeholder="e.g., Acne, Scars, Fine lines"
+          class="p-2.5 border border-gray-300 rounded-md text-sm resize-y min-h-[80px] focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20"
         ></textarea>
       </div>
 
-      <div class="form-group">
-        <label>Profile Photo</label>
-        <div class="file-upload-box" @click="triggerFileInput">
-          <i class="fas fa-cloud-upload-alt upload-icon"></i>
-          <p><a href="#">Upload a file</a> or drag and drop</p>
-          <p class="hint">PNG, JPG, GIF up to 10MB</p>
+      <div class="flex flex-col mb-4">
+        <label class="text-sm font-medium mb-1.5">Profile Photo</label>
+        <div class="border-2 border-dashed border-gray-300 text-center py-8 px-4 rounded-xl text-gray-500 cursor-pointer hover:border-gray-400 transition-colors" @click="triggerFileInput">
+          <i class="fas fa-cloud-upload-alt text-3xl mb-3 text-gray-400"></i>
+          <p class="m-0"><a href="#" class="text-indigo-600 underline font-semibold">Upload a file</a> or drag and drop</p>
+          <p class="text-xs text-gray-400 mt-1">PNG, JPG, GIF up to 10MB</p>
           <input
             ref="fileInput"
             type="file"
             accept="image/*"
             @change="handleFileUpload"
-            style="display: none"
+            class="hidden"
           />
         </div>
       </div>
 
-      <div class="form-footer">
-        <button type="button" class="cancel-btn" @click="goBack">Cancel</button>
-        <button type="submit" class="save-btn">Save Patient</button>
+      <div class="flex justify-end gap-2.5 mt-5">
+        <button type="button" class="bg-gray-100 text-gray-900 py-2.5 px-4 rounded-md border border-gray-300 cursor-pointer hover:bg-gray-200 transition-colors" @click="goBack">Cancel</button>
+        <button type="submit" class="bg-indigo-600 text-white py-2.5 px-4 rounded-md border-none cursor-pointer shadow-md hover:bg-indigo-700 transition-colors">Save Patient</button>
       </div>
     </form>
   </div>
@@ -128,109 +129,3 @@ const goBack = () => {
   router.back();
 };
 </script>
-
-<style scoped>
-.page-container {
-  max-width: 700px;
-  margin: 40px auto;
-  padding: 32px;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-}
-
-.page-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 4px;
-}
-
-.page-subtitle {
-  color: #6b7280;
-  font-size: 14px;
-  margin-bottom: 24px;
-}
-
-.form-row {
-  display: flex;
-  gap: 20px;
-}
-
-.form-group {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 16px;
-}
-
-.form-group label {
-  font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 6px;
-}
-
-input,
-select,
-textarea {
-  padding: 10px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 14px;
-}
-
-textarea {
-  resize: vertical;
-  min-height: 80px;
-}
-
-.file-upload-box {
-  border: 2px dashed #d1d5db;
-  text-align: center;
-  padding: 32px;
-  border-radius: 10px;
-  color: #6b7280;
-  cursor: pointer;
-}
-
-.file-upload-box a {
-  color: #4f46e5;
-  text-decoration: underline;
-}
-
-.file-upload-box .upload-icon {
-  font-size: 28px;
-  margin-bottom: 12px;
-  color: #9ca3af;
-}
-
-.hint {
-  font-size: 12px;
-  color: #9ca3af;
-}
-
-.form-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.cancel-btn {
-  background: #f3f4f6;
-  color: #111827;
-  padding: 10px 18px;
-  border-radius: 6px;
-  border: 1px solid #d1d5db;
-  cursor: pointer;
-}
-
-.save-btn {
-  background: #4f46e5;
-  color: white;
-  padding: 10px 18px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3);
-}
-</style>

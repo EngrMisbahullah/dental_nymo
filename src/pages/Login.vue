@@ -1,64 +1,77 @@
-<template>
-  <div v-if="!loading" class="main-login">
-    <div class="pulse-login-row">
-      <div class="pulse-login-column1">
-        <div class="login-logo">
+<template>  
+  <div v-if="!loading" class="flex flex-row justify-center mx-auto">
+    <div class="mt-12 max-w-[1440px] p-8 flex-1 flex flex-row justify-center items-center lg:flex-col">
+      <div class="w-2/5 lg:w-full">
+        <!-- Logo -->
+        <div class="mb-20 flex items-center justify-center">
           <img src="/logo/logo.svg" alt="logo" />
         </div>
 
-        <div class="login-container">
-          <div class="login-field">
+        <!-- Login Form -->
+        <div class="flex flex-col gap-3">
+          <!-- Email Field -->
+          <div class="relative flex items-center border-2 border-secondary border-l-[7px] rounded-md px-2.5 py-1.5 transition-all duration-300">
             <input
               type="email"
               v-model="email"
               required
               @focus="focusInput('email')"
               @blur="blurInput('email')"
+              class="w-full relative z-[1] border-none bg-transparent outline-none text-base py-2 my-0.5 autofill:bg-transparent autofill:shadow-[0_0_0px_1000px_transparent_inset]"
             />
-            <label :class="{ active: email || focused.email }" class="floating-label"
-              >Email</label
-            >
+            <label 
+              :class="[
+                'absolute left-3 top-1/2 -translate-y-1/2 text-base font-medium text-gray-500 bg-white px-1.5 transition-all duration-300',
+                { '!top-1 !text-sm !text-secondary': email || focused.email }
+              ]"
+            >Email</label>
           </div>
 
-          <div class="login-field">
+          <!-- Password Field -->
+          <div class="relative flex items-center border-2 border-secondary border-l-[7px] rounded-md px-2.5 py-1.5 transition-all duration-300">
             <input
               :type="showPassword ? 'text' : 'password'"
               v-model="password"
               required
               @focus="focusInput('password')"
               @blur="blurInput('password')"
+              class="w-full relative z-[1] border-none bg-transparent outline-none text-base py-2 my-0.5"
             />
-            <label
-              :class="{ active: password || focused.password }"
-              class="floating-label"
-              >Password</label
-            >
+            <label 
+              :class="[
+                'absolute left-3 top-1/2 -translate-y-1/2 text-base font-medium text-gray-500 bg-white px-1.5 transition-all duration-300',
+                { '!top-1 !text-sm !text-secondary': password || focused.password }
+              ]"
+            >Password</label>
             <i
               :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"
-              class="eye-icon"
+              class="absolute right-2.5 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
               @click="togglePassword"
             ></i>
           </div>
         </div>
 
-        <div v-if="errorMessage" class="error-message">
-          <p>{{ errorMessage }}</p>
+        <!-- Error Message -->
+        <div v-if="errorMessage" class="bg-red-100 border border-red-500 rounded-md px-4 py-2.5 mt-4">
+          <p class="text-red-600 m-0 text-sm">{{ errorMessage }}</p>
         </div>
 
-        <div class="forgot-link-pass">
-          <p>
-            Forgot password? click <router-link to="#">here</router-link> to reset your
-            password
+        <!-- Forgot Password -->
+        <div class="text-right">
+          <p class="text-gray-400 my-5 text-[15px]">
+            Forgot password? click <router-link to="#" class="text-secondary hover:underline">here</router-link> to reset your password
           </p>
         </div>
 
-        <div class="login-btns">
-          <button class="login-btn1" @click="login" :disabled="isLoginDisabled">
+        <!-- Login Buttons -->
+        <div class="mt-10 flex flex-row items-center justify-center sm:flex-col">
+          <button 
+            @click="login" 
+            :disabled="isLoginDisabled"
+            class="border-none rounded-lg bg-secondary py-2.5 px-10 text-base border border-secondary text-white hover:bg-secondary-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
             Log in
           </button>
-          <!-- <router-link to="/signup">
-            <button class="login-btn2 ml-13">Sign up</button>
-          </router-link> -->
         </div>
       </div>
     </div>
@@ -144,172 +157,3 @@ export default {
   },
 };
 </script>
-<style scoped>
-.main-login {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.pulse-login-row {
-  margin-top: 50px;
-  max-width: 1440px;
-  padding: 30px;
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-
-.pulse-login-column1 {
-  width: 40%;
-}
-
-@media (max-width: 1000px) {
-  .pulse-login-row {
-    flex-direction: column;
-  }
-
-  .pulse-login-column1 {
-    width: 100%;
-  }
-}
-
-.login-logo {
-  margin-bottom: 75px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.login-container {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.login-field {
-  position: relative;
-  display: flex;
-  align-items: center;
-  border: 2px solid #2b2899;
-  padding: 7px 10px;
-  border-left: 7px solid #2b2899;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-}
-
-.login-field input {
-  width: 100%;
-  position: relative;
-  z-index: 1;
-  border: none;
-  background-color: transparent !important;
-  outline: none;
-  font-size: 16px;
-  padding: 8px 0;
-  margin: 2px 0;
-}
-
-.login-field input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
-  box-shadow: 0 0 0px 1000px transparent inset !important;
-  -webkit-text-fill-color: #000 !important;
-  transition: background-color 9999s ease-in-out 0s;
-}
-
-.floating-label {
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 16px;
-  font-weight: 500;
-  color: #666;
-  background: white;
-  padding: 0 5px;
-  transition: all 0.3s ease;
-}
-
-.floating-label.active {
-  top: 5px;
-  font-size: 14px;
-  color: #2b2899;
-}
-
-.eye-icon {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  color: #666;
-}
-
-.forgot-link-pass {
-  text-align: right;
-}
-
-.forgot-link-pass p {
-  color: rgb(155, 155, 155);
-  margin-top: 20px;
-  margin-bottom: 20px;
-  font-size: 15px;
-}
-
-.login-btns {
-  margin-top: 40px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-
-.login-btn1 {
-  border: none;
-  border-radius: 7px;
-  background-color: #2b2899;
-  padding: 10px 40px;
-  font-size: 16px;
-  border: 1px solid #2b2899;
-  color: white;
-}
-
-.login-btn2 {
-  border: 1px solid #2b2899;
-  border-radius: 7px;
-  background-color: white;
-  padding: 10px 40px;
-  font-size: 16px;
-  color: #2b2899;
-}
-
-@media (max-width: 350px) {
-  .login-btns {
-    flex-direction: column;
-  }
-
-  .login-btn2 {
-    width: 100%;
-    margin-left: 0px !important;
-    margin-top: 10px;
-  }
-}
-
-.error-message {
-  background-color: #fee2e2;
-  border: 1px solid #ef4444;
-  border-radius: 6px;
-  padding: 10px 15px;
-  margin-top: 15px;
-}
-
-.error-message p {
-  color: #dc2626;
-  margin: 0;
-  font-size: 14px;
-}
-</style>
