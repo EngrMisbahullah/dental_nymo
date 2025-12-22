@@ -1,191 +1,162 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Login from '../pages/Login.vue';
-import DashboardLayout from '../pages/Dashboard.vue';
 
-// Dashboard main views
-import DashboardView from '../pages/sections/DashboardView.vue';
-
-// Appointments
-// We've removed AppointmentsView and will use AppointmentsLayout instead.
-import AppointmentsLayout from '../pages/sections/Appointments/AppointmentsLayout.vue'; 
-import Scheduler from '../pages/sections/Appointments/Components/Scheduler.vue';
-import AppointmentHistory from '../pages/sections/Appointments/Components/AppointmentHistory.vue';
-import PatientCommunication from '../pages/sections/Appointments/Components/PatientCommunication.vue';
-import BillingInformation from '../pages/sections/Appointments/Components/BillingInformation.vue';
-import WaitingList from '../pages/sections/Appointments/Components/WaitingList.vue';
-import AppointmentTypes from '../pages/sections/Appointments/Components/AppointmentTypes.vue';
-import NewAppointment from '../pages/sections/Appointments/Components/NewAppointment.vue';
-
-// Chart module
-import ChartView from '../pages/sections/Chart/ChartView.vue';
-
-//clinical notes and treatment plan
-import ClinicalNotes from '../pages/sections/ClinicalNotes/ClinicalNotes-TreatmentPlan.vue';
-
-//Private Treatment & Invoicing
-import PrivateTreatmentInvoicing from '../pages/sections/PrivateTreatmentInvoicing/PrivateTreatmentInvoicing.vue';
- 
-//Patient management
-import PatientsView from '../pages/sections/Patients/Patients.vue';
-
-// File storage
-import FileStorage from '../pages/sections/FileStorage.vue';
-
-// NHS FP17 Claims
-import NHSFP17Claims from '../pages/sections/NHSFP17Claims/Claims.vue';
-
-//UDA Management
-import UDAManagement from '../pages/sections/UDAManagement/UDAManagement.vue';
-
-//Performer & Contract Management
-import PerformerContractManagement from '../pages/sections/Performer&ContractManagement/PerformerContractManagement.vue';
-
-//Lab & Referral Workflow
-import LabReferralWorkflow from '../pages/sections/Lab&ReferralWorkflow/LabReferralWorkflow.vue';
-
-import StaffView from '../pages/sections/StaffView.vue';
-import ReportsView from '../pages/sections/ReportsView.vue';
-import SettingsView from '../pages/sections/SettingsView.vue';
-
-// CRM views
-import CRMView from '../pages/sections/CRM/CRMView.vue';
-import AddPatient from '../pages/sections/CRM/AddPatient.vue';
-import ViewPatient from '../pages/sections/CRM/ViewPatient.vue';
-
-// Family module
-import FamilyView from '../pages/sections/Family/FamilyView.vue';
-
-// Imaging module
-import ImagingView from '../pages/sections/Imaging/ImagingView.vue';
+// Layout (eager load for immediate display)
+import DashboardLayout from '@/layouts/DashboardLayout.vue';
 
 const routes = [
+  // ==========================================
+  // Auth Routes (Guest Only)
+  // ==========================================
   {
     path: '/',
     name: 'Login',
-    component: Login,
+    component: () => import('@/pages/auth/login/Index.vue'),
     meta: { guest: true }
   },
+  {
+    path: '/signup',
+    name: 'Signup',
+    component: () => import('@/pages/auth/signup/Index.vue'),
+    meta: { guest: true }
+  },
+  {
+    path: '/forgot-password',
+    name: 'ForgotPassword',
+    component: () => import('@/pages/auth/forgot-password/Index.vue'),
+    meta: { guest: true }
+  },
+  {
+    path: '/reset-password',
+    name: 'ResetPassword',
+    component: () => import('@/pages/auth/reset-password/Index.vue'),
+    meta: { guest: true }
+  },
+
+  // ==========================================
+  // Dashboard Routes (Authenticated)
+  // ==========================================
   {
     path: '/dashboard',
     component: DashboardLayout,
     meta: { requiresAuth: true },
     children: [
+      // Dashboard Home
       {
         path: '',
         name: 'DashboardHome',
-        component: DashboardView,
+        component: () => import('@/pages/dashboard/Index.vue'),
         meta: { permission: 'dashboard.view_own' }
       },
+
+      // CRM
       {
         path: 'crm',
         name: 'CRM',
-        component: CRMView,
+        component: () => import('@/pages/crm/Index.vue'),
         meta: { permission: 'patients.view' }
       },
-
-      // CRM children are correctly placed here.
       {
         path: 'crm/add-patient',
         name: 'AddPatient',
-        component: AddPatient,
+        component: () => import('@/pages/crm/AddPatient.vue'),
         meta: { permission: 'patients.create' }
       },
       {
         path: 'crm/view-patient/:id',
         name: 'ViewPatient',
-        component: ViewPatient,
+        component: () => import('@/pages/crm/ViewPatient.vue'),
         props: true,
         meta: { permission: 'patients.view' }
       },
 
-      // Appointments routes
+      // Appointments
       {
         path: 'appointments',
-        component: AppointmentsLayout,
+        component: () => import('@/pages/appointments/Index.vue'),
         meta: { permissions: ['appointments.view_own', 'appointments.view_all'] },
         children: [
           {
             path: 'scheduler',
             name: 'Scheduler',
-            component: Scheduler,
+            component: () => import('@/pages/appointments/components/Scheduler.vue'),
             meta: { permissions: ['appointments.view_own', 'appointments.view_all'] }
           },
           {
             path: 'history',
             name: 'AppointmentHistory',
-            component: AppointmentHistory,
+            component: () => import('@/pages/appointments/components/AppointmentHistory.vue'),
             meta: { permissions: ['appointments.view_own', 'appointments.view_all'] }
           },
           {
             path: 'communication',
             name: 'PatientCommunication',
-            component: PatientCommunication,
+            component: () => import('@/pages/appointments/components/PatientCommunication.vue'),
             meta: { permission: 'communication.view_history' }
           },
           {
             path: 'billing',
             name: 'BillingInformation',
-            component: BillingInformation,
+            component: () => import('@/pages/appointments/components/BillingInformation.vue'),
             meta: { permission: 'financials.view_patient_balance' }
           },
           {
             path: 'waiting-list',
             name: 'WaitingList',
-            component: WaitingList,
+            component: () => import('@/pages/appointments/components/WaitingList.vue'),
             meta: { permission: 'appointments.manage_waiting_room' }
           },
           {
             path: 'types',
             name: 'AppointmentTypes',
-            component: AppointmentTypes,
+            component: () => import('@/pages/appointments/components/AppointmentTypes.vue'),
             meta: { permission: 'settings.manage_appointment_types' }
           },
           {
             path: 'new',
             name: 'NewAppointment',
-            component: NewAppointment,
+            component: () => import('@/pages/appointments/components/NewAppointment.vue'),
             meta: { permission: 'appointments.create' }
           },
         ],
       },
 
-      // chart
+      // Chart
       {
         path: 'chart',
         name: 'ChartView',
-        component: ChartView,
+        component: () => import('@/pages/chart/Index.vue'),
         meta: { permission: 'chart.view' }
       },
 
-      // clinical notes
+      // Clinical Notes
       {
         path: 'notes',
         name: 'ClinicalNotes',
-        component: ClinicalNotes,
+        component: () => import('@/pages/clinical-notes/Index.vue'),
         meta: { permissions: ['notes.view', 'treatment_plan.view'] }
       },
 
-      // patient management
+      // Patients
       {
         path: 'patients',
         name: 'Patients',
-        component: PatientsView,
+        component: () => import('@/pages/patients/Index.vue'),
         meta: { permission: 'patients.view' }
       },
 
-      // file storage
+      // File Storage
       {
         path: 'files',
         name: 'FileStorage',
-        component: FileStorage,
+        component: () => import('@/pages/file-storage/Index.vue'),
         meta: { permission: 'imaging.view' }
       },
 
-      // PrivateTreatmentInvoicing
+      // Private Treatment & Invoicing
       {
         path: 'private-treatment-invoicing',
         name: 'PrivateTreatmentInvoicing',
-        component: PrivateTreatmentInvoicing,
+        component: () => import('@/pages/invoicing/Index.vue'),
         meta: { permission: 'financials.view_patient_balance' }
       },
 
@@ -193,7 +164,7 @@ const routes = [
       {
         path: 'claims',
         name: 'NHSFP17Claims',
-        component: NHSFP17Claims,
+        component: () => import('@/pages/claims/Index.vue'),
         meta: { permissions: ['insurance.view', 'insurance.create_claim'] }
       },
 
@@ -201,7 +172,7 @@ const routes = [
       {
         path: 'uda',
         name: 'UDAManagement',
-        component: UDAManagement,
+        component: () => import('@/pages/uda-management/Index.vue'),
         meta: { permissions: ['insurance.view', 'reports.view_production'] }
       },
 
@@ -209,7 +180,7 @@ const routes = [
       {
         path: 'pcm',
         name: 'PerformerContractManagement',
-        component: PerformerContractManagement,
+        component: () => import('@/pages/performer-management/Index.vue'),
         meta: { permission: 'staff.view' }
       },
 
@@ -217,45 +188,69 @@ const routes = [
       {
         path: 'lab',
         name: 'LabReferralWorkflow',
-        component: LabReferralWorkflow,
+        component: () => import('@/pages/lab-workflow/Index.vue'),
         meta: { permissions: ['lab.view', 'referrals.view'] }
       },
 
-      // Family module
+      // Family
       {
         path: 'family',
         name: 'Family',
-        component: FamilyView,
+        component: () => import('@/pages/family/Index.vue'),
         meta: { permission: 'patients.view_family' }
       },
 
-      // Imaging module
+      // Imaging
       {
         path: 'imaging',
         name: 'Imaging',
-        component: ImagingView,
+        component: () => import('@/pages/imaging/Index.vue'),
         meta: { permission: 'imaging.view' }
       },
 
+      // Staff
       {
         path: 'staff',
         name: 'Staff',
-        component: StaffView,
+        component: () => import('@/pages/staff/Index.vue'),
         meta: { permission: 'staff.view' }
       },
+
+      // Reports
       {
         path: 'reports',
         name: 'Reports',
-        component: ReportsView,
+        component: () => import('@/pages/reports/Index.vue'),
         meta: { permission: 'reports.view_basic' }
       },
+
+      // Settings
       {
         path: 'settings',
         name: 'Settings',
-        component: SettingsView,
+        component: () => import('@/pages/settings/Index.vue'),
         meta: { permission: 'settings.view' }
       },
     ],
+  },
+
+  // ==========================================
+  // Error Routes
+  // ==========================================
+  {
+    path: '/error',
+    name: 'ServerError',
+    component: () => import('@/pages/errors/server-error/Index.vue'),
+  },
+  {
+    path: '/unauthorized',
+    name: 'Unauthorized',
+    component: () => import('@/pages/errors/unauthorized/Index.vue'),
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import('@/pages/errors/not-found/Index.vue'),
   },
 ];
 
@@ -267,7 +262,7 @@ const router = createRouter({
 // Navigation guard
 router.beforeEach(async (to, from, next) => {
   // Dynamically import to ensure Pinia is initialized
-  const { useAuthStore } = await import('../stores/auth');
+  const { useAuthStore } = await import('@/stores/auth');
   const authStore = useAuthStore();
 
   // Check if route requires authentication
